@@ -1,0 +1,664 @@
+path	lines	category	read_level	note
+.github/ISSUE_TEMPLATE/1-bug.yml	57	docs	L0-not-read	Template issue
+.github/ISSUE_TEMPLATE/2-works.yml	17	docs	L0-not-read	Template issue
+.github/ISSUE_TEMPLATE/3-feature.yml	11	docs	L0-not-read	Template issue
+.github/ISSUE_TEMPLATE/config.yml	8	docs	L0-not-read	Template issue
+.github/pull_request_template.md	14	docs	L3-full	đọc toàn bộ
+.gitignore	2	build	L3-full	đọc toàn bộ
+AGENTS.md	6	docs	L3-full	đọc toàn bộ
+CHANGELOG.md	528	docs	L2-partial	2.3.4-2.5.3 đọc đủ; các bản cũ hơn chỉ grep
+CONTRIBUTING.md	47	docs	L3-full	đọc toàn bộ
+LICENSE	75	license	L3-full	đọc toàn bộ
+NOTICE	14	license	L3-full	đọc toàn bộ
+README.md	182	docs	L3-full	đọc toàn bộ
+build/accel_build.sh	23	build	L3-full	đọc toàn bộ
+build/accel_build_all.sh	18	build	L3-full	đọc toàn bộ
+build/build263.sh	27	build	L3-full	đọc toàn bộ
+build/build_agdc.sh	10	build	L3-full	đọc toàn bộ
+build/build_plugin.sh	36	build	L3-full	đọc toàn bộ
+build/build_plugin_release.sh	25	build	L3-full	đọc toàn bộ
+build/build_primary_selector.sh	21	build	L3-full	đọc toàn bộ
+build/build_xlate.sh	23	build	L3-full	đọc toàn bộ
+build/build_xlate_release.sh	30	build	L3-full	đọc toàn bộ
+docs/AUTO-PRIMARY-GPU.md	77	docs	L0-not-read	Tài liệu ngoài đường hiệu năng (card support, multi-GPU, sleep, troubleshooting)
+docs/CARD-SUPPORT.md	92	docs	L0-not-read	Tài liệu ngoài đường hiệu năng (card support, multi-GPU, sleep, troubleshooting)
+docs/EVENT-WAIT-RTX5060.json	1325	docs	L2-partial	chỉ phần summary
+docs/EVENT-WAIT.md	127	docs	L3-full	đọc toàn bộ
+docs/HOW-IT-WORKS.md	150	docs	L3-full	đọc toàn bộ
+docs/MULTI-GPU.md	126	docs	L0-not-read	Tài liệu ngoài đường hiệu năng (card support, multi-GPU, sleep, troubleshooting)
+docs/NVRMFB-DISPLAY-AUDIO-MAPPING.md	13	docs	L0-not-read	Tài liệu ngoài đường hiệu năng (card support, multi-GPU, sleep, troubleshooting)
+docs/NVRMFB-HOTPLUG-LIFECYCLE.md	8	docs	L0-not-read	Tài liệu ngoài đường hiệu năng (card support, multi-GPU, sleep, troubleshooting)
+docs/SLEEP-WAKE.md	82	docs	L0-not-read	Tài liệu ngoài đường hiệu năng (card support, multi-GPU, sleep, troubleshooting)
+docs/TROUBLESHOOTING.md	91	docs	L0-not-read	Tài liệu ngoài đường hiệu năng (card support, multi-GPU, sleep, troubleshooting)
+docs/host-copy-coherence-review.md	32	docs	L3-full	đọc toàn bộ
+kexts/NMDRM/Info.plist	30	build-metadata	L0-not-read	Thiết bị DRM cho AMD/Intel; máy mục tiêu không dùng
+kexts/NMDRM/build.sh	19	build	L3-full	đọc toàn bộ
+kexts/NMDRM/nmdrm.cpp	281	source	L0-not-read	Thiết bị DRM cho AMD/Intel; máy mục tiêu không dùng
+kexts/NMHDA/Info.plist	40	build-metadata	L0-not-read	Audio HDA; không thuộc đường hiển thị
+kexts/NMHDA/build.sh	18	build	L0-not-read	Audio HDA; không thuộc đường hiển thị
+kexts/NMHDA/nmhda.cpp	237	source	L0-not-read	Audio HDA; không thuộc đường hiển thị
+kexts/NMIntelFB/Info-virtual.plist	37	build-metadata	L0-not-read	Panel Intel trên laptop; máy mục tiêu không dùng
+kexts/NMIntelFB/Info.plist	31	build-metadata	L0-not-read	Panel Intel trên laptop; máy mục tiêu không dùng
+kexts/NMIntelFB/display_ids.inc	85	generated	L1-grep	đầu file (generated)
+kexts/NMIntelFB/intelfb.cpp	485	source	L0-not-read	Panel Intel trên laptop; máy mục tiêu không dùng
+kexts/NMIntelFB/nvrm_vram_abi.h	28	source	L1-grep	md5 so sánh
+kexts/NVPrimarySelector/Info.plist	49	build-metadata	L0-not-read	Chọn GPU chính khi có nhiều GPU NVIDIA; máy có 1 GPU
+kexts/NVPrimarySelector/NVPrimarySelector.cpp	101	source	L0-not-read	Chọn GPU chính khi có nhiều GPU NVIDIA; máy có 1 GPU
+kexts/NVPrimarySelector/nvrm_gpu_select.h	49	source	L0-not-read	Chọn GPU chính khi có nhiều GPU NVIDIA; máy có 1 GPU
+kexts/NVPrimarySelector/nvrm_gpu_select_policy.h	14	source	L0-not-read	Chọn GPU chính khi có nhiều GPU NVIDIA; máy có 1 GPU
+kexts/NVRM/Info.plist	70	build-metadata	L1-grep	parse plist
+kexts/NVRM/NVRM.cpp	2059	source	L2-partial	330-450, 740-860, 940-1130, 1278-1330 (auto-go, BAR1, gpu profile)
+kexts/NVRM/accel/Info.plist	42	build-metadata	L1-grep	parse plist
+kexts/NVRM/accel/gen_stubs.py	34	build	L0-not-read	Script sinh header
+kexts/NVRM/accel/gen_tahoe_fwd.py	62	build	L0-not-read	Script sinh header
+kexts/NVRM/accel/iofam/IOAccel2DContext2.h	25	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelCLContext2.h	23	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelContext2.h	66	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelDisplayMachine.h	37	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelDisplayPipe.h	57	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelEventMachine2.h	66	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelEventMachineFast2.h	63	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelGLContext2.h	30	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelLegacyDisplayMachine.h	38	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelLegacyDisplayPipe.h	29	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelLegacySurface.h	24	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelMemory.h	42	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelMemoryMap.h	39	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelResource2.h	61	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelShared2.h	27	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelSubmitter2.h	33	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelSurface.h	44	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelSysMemory.h	34	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelTask.h	33	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelVidMemory.h	36	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/IOAccelVideoContext2.h	23	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/iofam/iofam_types.h	59	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/nvaccel_stubs.h	187	source	L3-full	đọc toàn bộ
+kexts/NVRM/accel/nvrm-accel.cpp	2469	source	L3-full	đọc toàn bộ
+kexts/NVRM/accel/re/IOAccelDevice2.h	187	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/re/IOAccelSharedUserClient2.h	214	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/re/IOAccelerator.h	86	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/re/IOGraphicsAccelerator2.h	199	vendor-or-reconstructed-header	L0-not-read	Header Apple dựng lại (vendor/reconstructed)
+kexts/NVRM/accel/tahoe_fwd.h	161	generated	L1-grep	đầu file (generated)
+kexts/NVRM/agdc/AppleGraphicsDeviceControl_re.h	30	vendor-or-reconstructed-header	L1-grep	chỉ diff với kexts/NVRMAGDC
+kexts/NVRM/agdc/Info.plist	27	build-metadata	L1-grep	chỉ diff với kexts/NVRMAGDC
+kexts/NVRM/agdc/iop-getmap.c	20	source	L1-grep	chỉ diff với kexts/NVRMAGDC
+kexts/NVRM/agdc/nvrm-agdc-k5.h	128	source	L1-grep	chỉ diff với kexts/NVRMAGDC
+kexts/NVRM/agdc/nvrm-agdc.cpp	198	source	L1-grep	chỉ diff với kexts/NVRMAGDC
+kexts/NVRM/build-completion-archive.py	41	build	L0-not-read	Header/khai báo phụ; đọc khi cần theo grep
+kexts/NVRM/fb/Info.plist	63	build-metadata	L1-grep	chỉ so sánh với NVRMFB (bản cũ, không được test dùng)
+kexts/NVRM/fb/mkhud.py	120	build	L1-grep	chỉ so sánh với NVRMFB (bản cũ, không được test dùng)
+kexts/NVRM/fb/nvrm-fb.cpp	1656	source	L1-grep	chỉ so sánh với NVRMFB (bản cũ, không được test dùng)
+kexts/NVRM/fb/nvrm-hud.h	110	source	L1-grep	chỉ so sánh với NVRMFB (bản cũ, không được test dùng)
+kexts/NVRM/nv-xnu.h	45	source	L0-not-read	Header/khai báo phụ; đọc khi cần theo grep
+kexts/NVRM/nv_xnu_power.cpp	74	source	L0-not-read	Sleep/wake
+kexts/NVRM/nv_xnu_stubs.cpp	1798	source	L1-grep	grep sleep/spin
+kexts/NVRM/nvidia-modeset-os-interface.h	393	vendor-or-reconstructed-header	L0-not-read	Header/khai báo phụ; đọc khi cần theo grep
+kexts/NVRM/nvkms_shaders.cpp	1381	source	L0-not-read	Shader headsurface của NVKMS; không dùng cho flip thuần
+kexts/NVRM/nvrm_fbinfo.cpp	218	source	L0-not-read	Thông tin framebuffer lúc boot
+kexts/NVRM/nvrm_gpuva.cpp	232	source	L1-grep	grep ABI
+kexts/NVRM/nvrm_gpuva_abi.h	54	source	L1-grep	grep ABI
+kexts/NVRM/nvrm_kapi_fields.c	24	source	L0-not-read	Bảng offset KAPI
+kexts/NVRM/nvrm_off.h	127	source	L0-not-read	Header/khai báo phụ; đọc khi cần theo grep
+kexts/NVRM/nvrm_pageoff.c	135	source	L1-grep	grep vòng chờ
+kexts/NVRM/nvrm_surfshare.cpp	68	source	L1-grep	grep ABI
+kexts/NVRM/nvrm_surfshare_abi.h	57	source	L1-grep	grep ABI
+kexts/NVRM/nvrm_vram_abi.h	28	source	L1-grep	md5 so sánh 3 bản
+kexts/NVRM/os-nvkms-xnu.cpp	515	source	L2-partial	30-120 (khóa PM), 280-320 (usleep/yield)
+kexts/NVRM/os-xnu.cpp	428	source	L2-partial	140-200 (spinlock, delay) + grep
+kexts/NVRM/os-xnu2.cpp	1779	source	L2-partial	600-800, 1040-1130, 1260-1320, 1398-1410 (sentinel, wait queue, os_schedule)
+kexts/NVRM/patches/610-backlight-register-log.patch	52	source-patch-on-vendor	L0-not-read	Patch vào mã NVIDIA; chỉ đọc README mô tả
+kexts/NVRM/patches/610-display-completion.patch	70	source-patch-on-vendor	L0-not-read	Patch vào mã NVIDIA; chỉ đọc README mô tả
+kexts/NVRM/patches/610-fsp-timer-double-destroy.patch	36	source-patch-on-vendor	L0-not-read	Patch vào mã NVIDIA; chỉ đọc README mô tả
+kexts/NVRM/patches/610-setmode-reason.patch	21	source-patch-on-vendor	L0-not-read	Patch vào mã NVIDIA; chỉ đọc README mô tả
+kexts/NVRM/patches/615-viewport-scaling.patch	37	source-patch-on-vendor	L0-not-read	Patch vào mã NVIDIA; chỉ đọc README mô tả
+kexts/NVRM/patches/README.md	23	docs	L3-full	đọc toàn bộ
+kexts/NVRM/push.inc	116	source	L0-not-read	Helper pushbuffer khởi tạo
+kexts/NVRM/rmcc.py	19	build	L3-full	đọc toàn bộ
+kexts/NVRMAGDC/AppleGraphicsDeviceControl_re.h	30	vendor-or-reconstructed-header	L0-not-read	Policy AGDC; không trên đường frame
+kexts/NVRMAGDC/Info.plist	27	build-metadata	L1-grep	parse plist
+kexts/NVRMAGDC/nvrm-agdc-k5.h	142	source	L0-not-read	Policy AGDC; không trên đường frame
+kexts/NVRMAGDC/nvrm-agdc.cpp	316	source	L0-not-read	Policy AGDC; không trên đường frame
+kexts/NVRMAGDC/nvrm_off.h	25	source	L0-not-read	Policy AGDC; không trên đường frame
+kexts/NVRMFB/fb/Info.plist	63	build-metadata	L1-grep	parse plist
+kexts/NVRMFB/fb/mkhud.py	120	build	L0-not-read	Header/khai báo phụ; đọc khi cần theo grep
+kexts/NVRMFB/fb/nvrm-allocation-table.h	33	source	L0-not-read	Header/khai báo phụ; đọc khi cần theo grep
+kexts/NVRMFB/fb/nvrm-fb-safety.h	23	source	L0-not-read	Header/khai báo phụ; đọc khi cần theo grep
+kexts/NVRMFB/fb/nvrm-fb.cpp	3978	source	L2-partial	1-135, 1490-2340, 2436-2560, 3130-3680; phần còn lại (mode/EDID/hotplug/audio/power) chỉ lướt cấu trúc
+kexts/NVRMFB/fb/nvrm-hud.h	110	source	L0-not-read	Header/khai báo phụ; đọc khi cần theo grep
+kexts/NVRMFB/nv-xnu.h	34	source	L0-not-read	Header/khai báo phụ; đọc khi cần theo grep
+kexts/NVRMFB/nvidia-modeset-os-interface.h	393	vendor-or-reconstructed-header	L0-not-read	Header/khai báo phụ; đọc khi cần theo grep
+kexts/NVRMFB/nvrm_eld.h	133	source	L1-grep	md5/diff header ABI
+kexts/NVRMFB/nvrm_gpuva_abi.h	54	source	L1-grep	md5/diff header ABI
+kexts/NVRMFB/nvrm_off.h	76	source	L1-grep	md5/diff header ABI
+kexts/NVRMFB/nvrm_surfshare_abi.h	51	source	L1-grep	md5/diff header ABI
+kexts/NVRMFB/nvrm_vram_abi.h	28	source	L1-grep	md5/diff header ABI
+nvk/2.0.5/README.md	14	docs	L3-full	đọc toàn bộ
+nvk/MESA_BASE	1	build-metadata	L3-full	đọc toàn bộ
+nvk/nvk-macos.patch	12298	source-patch-on-vendor	L2-partial	nvkmd_nvrm_sync.c (toàn bộ), nvkmd_nvrm_ctx.c 80-282/420-460/560-602/875-1200, nvmtl_cfg.h, NVK 2.0.5 README; NAK/ray tracing/descriptor không đọc
+package/install.sh	523	package	L2-partial	grep đường cài đặt, phiên bản, KC
+package/uninstall.sh	113	package	L0-not-read	Gỡ cài đặt
+plugin/.gitignore	5	build	L3-full	đọc toàn bộ
+plugin/NVMTLDevice.m	2140	source	L2-partial	1-115, 860-990, 2125-2140
+plugin/NVMTLDevice_contract.m	86	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+plugin/NVMTLEmbedded.m	327	source	L0-not-read	Shader nhúng
+plugin/NVMTLEventSync.m	832	source	L3-full	đọc toàn bộ
+plugin/NVMTLForward.m	273	source	L0-not-read	Forwarder selector
+plugin/NVMTLGL.m	525	source	L0-not-read	OpenGL-on-Metal / GL vblank; không trên đường kéo/cuộn của WindowServer
+plugin/NVMTLGLVBlank.m	177	source	L0-not-read	OpenGL-on-Metal / GL vblank; không trên đường kéo/cuộn của WindowServer
+plugin/NVMTLLibraryLoad.m	2933	source	L2-partial	150-200, 340-420 (grep), 840-900
+plugin/NVMTLObjects.h	323	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+plugin/NVMTLObjects.m	5727	source	L2-partial	84-130, 313-456, 880-1060, 1170-1340, 4100-4135, 5035-5150, 5700-5727 + chỉ mục hàm
+plugin/NVMTLSass.m	342	source	L0-not-read	Đường dispatch SASS cho compute; không trên đường compositor
+plugin/NVMTLSassLaunch.m	516	source	L0-not-read	Đường dispatch SASS cho compute; không trên đường compositor
+plugin/NVMTLSassResolve.m	398	source	L0-not-read	Đường dispatch SASS cho compute; không trên đường compositor
+plugin/NVMTLVendorCompiler.m	608	source	L0-not-read	Lane compiler NVVM cho MPS/compute
+plugin/nvconv.metal	138	source	L0-not-read	Fast path convolution MPS
+plugin/nvconv_lib.h	4620	source	L0-not-read	Fast path convolution MPS
+plugin/nvmtl_cmd_refusal.h	42	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+plugin/nvmtl_fd_token.h	32	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+plugin/nvmtl_independent_helpers.h	90	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+plugin/nvmtl_log_failure.h	34	source	L3-full	đọc toàn bộ
+plugin/nvmtl_physical_bounds.h	38	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+plugin/nvmtl_readonly_metadata.h	64	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+plugin/nvmtl_sample_depth_contract.h	14	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+plugin/nvmtl_sample_positions.h	70	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+plugin/nvmtl_sampler_desc.h	16	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+plugin/nvmtl_sampler_state.h	66	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+plugin/nvmtl_sass_gate.h	21	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+plugin/nvmtl_sass_params.h	183	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+plugin/nvmtl_tex_upload.h	61	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+plugin/nvmtl_visibility_sum_spv.h	40	source	L1-grep	đầu file
+plugin/nvmtl_vk.c	8010	source	L2-partial	120-200, 680-715, 1040-1072, 1577-1720, 1888-1975, 2680-2715, 5625-5840, 6164-6380
+plugin/nvmtl_vk.h	366	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
+tools/bench_copy_coherence.m	40	test	L0-not-read	Bench chạy trên macOS; ghi nhận như công cụ đo có sẵn
+tools/bench_event_wait.m	130	test	L0-not-read	Bench chạy trên macOS; ghi nhận như công cụ đo có sẵn
+tools/bench_event_wait.py	118	test	L0-not-read	Bench chạy trên macOS; ghi nhận như công cụ đo có sẵn
+tools/bench_memory_mapping.c	35	test	L0-not-read	Bench chạy trên macOS; ghi nhận như công cụ đo có sẵn
+tools/bench_pipeline_build.m	217	test	L0-not-read	Bench chạy trên macOS; ghi nhận như công cụ đo có sẵn
+tools/bench_surface_order.m	53	test	L0-not-read	Bench chạy trên macOS; ghi nhận như công cụ đo có sẵn
+tools/bench_surface_wrappers.m	66	test	L0-not-read	Bench chạy trên macOS; ghi nhận như công cụ đo có sẵn
+tools/bench_surface_wrappers_nv12.m	66	test	L0-not-read	Bench chạy trên macOS; ghi nhận như công cụ đo có sẵn
+tools/bench_vt_transfer.m	64	test	L0-not-read	Bench chạy trên macOS; ghi nhận như công cụ đo có sẵn
+tools/check_gpu_id_coverage.py	123	tooling	L0-not-read	Tooling phụ
+tools/check_nvrmfb_display_audio_mapping.py	70	tooling	L0-not-read	Tooling phụ
+tools/glbench/glbench.c	124	test	L0-not-read	Bench OpenGL (chạy trên macOS)
+tools/glbench/glpath.c	73	test	L0-not-read	Bench OpenGL (chạy trên macOS)
+tools/gpu_field_ids.json	349	data	L0-not-read	Tooling phụ
+tools/igfx/display_versions.json	340	data	L0-not-read	Công cụ Intel iGPU
+tools/igfx/igfx_aux.py	102	tooling	L0-not-read	Công cụ Intel iGPU
+tools/igfx/igfx_check.py	96	tooling	L0-not-read	Công cụ Intel iGPU
+tools/igfx/igfx_plan.py	261	tooling	L0-not-read	Công cụ Intel iGPU
+tools/igfx/igfx_trace.py	98	tooling	L0-not-read	Công cụ Intel iGPU
+tools/make_nvdec_t2d.py	33	tooling	L0-not-read	Tooling phụ
+tools/metal_selftest.sh	117	test	L0-not-read	Tooling phụ
+tools/nm_readonly_diagnostics.sh	160	tooling	L3-full	đọc toàn bộ
+tools/oracles/gpu_spin.m	110	test	L1-grep	không đọc
+tools/oracles/opencl_args.c	36	test	L1-grep	không đọc
+tools/oracles/opencl_biggrid.c	40	test	L1-grep	không đọc
+tools/oracles/opencl_imageui.c	56	test	L1-grep	không đọc
+tools/oracles/opencl_rotate.c	85	test	L1-grep	không đọc
+tools/oracles/visible-fn-constants/README.md	19	docs	L1-grep	không đọc
+tools/oracles/visible-fn-constants/kern.metal	12	test	L1-grep	không đọc
+tools/oracles/visible-fn-constants/vfn.m	84	test	L1-grep	không đọc
+tools/oracles/visible-fn-constants/vis.metal	3	test	L1-grep	không đọc
+tools/primary_install_fixture.py	117	test	L0-not-read	Tooling phụ
+tools/primary_runtime_fixture.sh	17	test	L0-not-read	Tooling phụ
+tools/sample-location-repro/README.md	14	docs	L0-not-read	Repro sample locations
+tools/sample-location-repro/opengl.m	58	test	L0-not-read	Repro sample locations
+tools/test_angle_chrome_family.py	95	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_angle_optin.py	31	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_bar1_budget.py	61	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_bar1_resize_choice.py	78	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_bindfd_range.py	47	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_boot_guard_wait.py	164	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_boot_raster_modes.py	86	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_boot_raster_pick.py	105	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_bytes_dup_seal.py	67	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_card_support.py	166	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_checksum_strict.py	40	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_copy_class_selection.py	115	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_display_power_retry.py	95	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_eld.c	134	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_eld.py	46	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_fb_open_console_copies.py	171	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_fbclaim_match.py	85	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_fd_pool.py	69	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_flip_cache_epoch.py	102	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_flip_latch_counters.py	272	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_gpu_id_coverage.py	86	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_graphics_bindings.py	73	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_gtx16_fb_logs.py	31	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_gtx16_nvenc_picker.py	37	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_headless_early.py	51	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_hwvbl_retry.py	80	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_icd_fd_token.py	69	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_igfx_plan.py	138	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_igfx_trace.py	45	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_install_keeps_my_settings.py	44	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_install_private_copy.py	90	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_iop_flip_gate.py	83	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_iop_flip_outcome.py	84	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_iop_present_path.py	160	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_kms_copy_and_quota.py	95	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_mem_unmap_no_double_free.py	117	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_nmhda_native_id.py	235	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_nv_parms_table.py	90	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_nvk_quiet.py	56	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_nvrm_map_table.py	51	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_nvrmfb_gamma_guard.py	45	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_nvrmfb_hotplug_lifecycle.py	89	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_opengl_perf.py	227	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_present_stats.py	124	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_primary_gpu_install.py	79	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_primary_gpu_range.cpp	20	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_push_verify_tolerates_empty.py	105	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_pv_sentinel_refuses.py	45	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_r3_map_owner.py	87	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_refusal_reasons.py	132	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_render_sampler_cache.py	84	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_resource_phi_fold.py	43	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_resset_lifetime.py	98	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_resset_seal.py	121	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_sass_gate.py	51	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_scanout_caps.py	101	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_security_hardening.py	223	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_slot_handle_guard.py	60	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_spvcache_dir.py	80	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_submission_copies.py	346	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_surface_alloc_bound.py	75	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_surface_pending_lifetime.py	72	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_surface_publication.py	142	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_surface_queue.py	144	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_surface_stream_copy.py	50	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_tex_upload.c	130	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_tex_upload.py	42	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_turing_default_settle.py	56	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_userclient_type.py	51	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_vbl_period_highrefresh.py	87	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_vram_display_budget.py	95	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_vram_park_hold.py	91	test	L1-grep	chỉ tên + chạy trong cloud
+tools/test_witness_keeps_backend.py	38	test	L1-grep	chỉ tên + chạy trong cloud
+tools/vtdump.py	61	tooling	L0-not-read	Tooling phụ
+translator/COPYING	676	license	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/LICENSE	165	license	L2-partial	chỉ phần đầu (xác nhận LGPL-3.0)
+translator/translator/Cargo.lock	1634	dependency-lock	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/Cargo.toml	63	build	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/README.md	153	docs	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/docs/ARCHITECTURE.md	199	docs	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/docs/HOWTO.md	290	docs	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/docs/REFLECTION.md	491	docs	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/examples/fc_specialize.rs	32	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/examples/loop_budget.rs	66	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/examples/mesh_lower_probe.rs	42	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/examples/translate_native.rs	64	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/examples/translate_reflected.rs	77	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/rustfmt.toml	3	build	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/air_intrinsics.rs	928	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/air_static_init.rs	107	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/as_shadow.rs	21	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/b78_tcg.rs	1161	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/construction.rs	216	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/dominators.rs	239	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/emission_order.rs	38	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/emit_sidecar.rs	832	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/emitted_effects.rs	225	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/env_vars.rs	353	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/fc_air_specialize.rs	317	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/fc_specialize.rs	2580	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/float16.rs	154	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/ift_runtime.rs	870	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/layout.rs	789	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/lib.rs	1781	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/linked_functions.rs	3073	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/main.rs	429	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/mesh_lower.rs	2023	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/meta/embedded.rs	710	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/meta/function_constants.rs	78	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/meta/globals.rs	973	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/meta/intersections.rs	228	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/meta/mod.rs	2680	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/meta/samplers.rs	63	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/meta/tests.rs	2219	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/meta/textures.rs	304	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/meta/types.rs	283	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/air_text.rs	81	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/async_copy.rs	261	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/atomic_image_format.rs	300	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/atomicrmw_text.rs	162	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/blocks.rs	2550	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/clone_crossarm/cross_arm.rs	250	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/clone_crossarm/detect.rs	54	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/clone_crossarm/finders.rs	321	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/clone_crossarm/mod.rs	919	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/clone_crossarm/normalize.rs	233	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/clone_crossarm/privatize.rs	729	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/exit_check.rs	820	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/graph.rs	437	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/loopforest.rs	872	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/mod.rs	78	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/construct_tree.rs	1143	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/construct_tree/renest.rs	979	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/construct_tree_fixtures.rs	759	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/dispatch_state.rs	124	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/loop_merges.rs	2639	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/mod.rs	4881	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/multi_exit.rs	583	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/own_arm.rs	756	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/phi_util.rs	130	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/plan.rs	473	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/plan_cache.rs	510	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/reject.rs	1280	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/rewrite.rs	176	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/selection_merge.rs	1705	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/straddle.rs	1679	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/straddle_region.rs	1519	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/terminal_exit.rs	1736	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_emit/test_support.rs	19	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg/structured_order.rs	268	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg_testkit/build.rs	496	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg_testkit/interp.rs	411	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg_testkit/mod.rs	61	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg_testkit/shapes.rs	488	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cfg_testkit/tests.rs	581	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/cl_constant.rs	136	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/constfold/constants.rs	418	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/constfold/eval.rs	268	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/constfold/mod.rs	921	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/constfold/nonzero.rs	303	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/constfold/prune.rs	156	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/constfold/simplify.rs	607	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/copy_memory_logical.rs	155	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/diagnostics.rs	515	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/dynamic_memcpy.rs	265	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emit_tiers.rs	949	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/air_struct_offsets.rs	491	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/body/calls.rs	1189	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/body/core_inst.rs	2657	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/body/gep_provenance.rs	1966	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/body/memcpy_memset.rs	2019	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/body/mod.rs	467	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/body/reinterpret_pointer.rs	1677	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/body/vector_load.rs	870	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/body/vector_store.rs	1236	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/body/word_access.rs	1066	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/control/loop_continue.rs	188	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/control/mod.rs	23	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/functions.rs	3621	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/helpers.rs	590	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/layout_tests.rs	129	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/memory/byte_array_scalar.rs	624	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/memory/device_addr.rs	603	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/memory/gep.rs	247	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/memory/index_ptr.rs	581	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/memory/mod.rs	7	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/memory/store.rs	557	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/memory/word_access.rs	548	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/mod.rs	3194	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/ops/air_calls.rs	620	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/ops/atomics.rs	334	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/ops/binary_ops.rs	361	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/ops/conversions.rs	614	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/ops/freeze_unary.rs	113	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/ops/intrinsics.rs	682	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/ops/mod.rs	50	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/ops/operands.rs	55	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/pointer_network.rs	1093	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/pointers/gep_linearize.rs	228	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/pointers/mod.rs	216	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/pointers/phi_compare.rs	1130	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/pointers/phi_merge.rs	946	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/pointers/phi_provenance.rs	836	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/pointers/raw_select.rs	898	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/pointers/select.rs	716	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/pointers/select_gep.rs	814	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/staged.rs	59	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/emitter/types.rs	1065	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/imageblock.rs	10	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/inline.rs	2634	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/ir/alloca.rs	306	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/ir/metadata_pointees.rs	101	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/ir/mod.rs	1727	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/ir/ordinary_inline/mod.rs	663	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/ir/ordinary_inline/tests.rs	535	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/ir/parse.rs	797	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/ir/pointer_pointees.rs	547	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/ir/raw_buffer.rs	810	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/ir/static_init.rs	864	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/lex.rs	290	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/mod.rs	199	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/opaque_image_select.rs	2407	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/owned_cfg.rs	11157	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/parse.rs	1421	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/private_vector_word.rs	599	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/psb.rs	2689	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/psb_value_select.rs	2771	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/ray_intersection.rs	1087	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/reloop_nest/emit.rs	1726	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/reloop_nest/mod.rs	649	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/reloop_nest/shape.rs	691	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/reloop_nest/verify.rs	113	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/relooper.rs	3198	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/render.rs	107	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/rewrites.rs	2266	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/stencil_export.rs	170	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/bounded_work.rs	83	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/buffers.rs	14458	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/byte_image.rs	218	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/control_flow.rs	5676	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P0_control.ll	40	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P10_load_float_bytegep.ll	42	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P11_store_float_bytegep.ll	42	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P12_store_half_hi.ll	42	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P13_mixed_view_alloca.ll	29	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P14_byte_image_alloca.ll	29	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P15_i64_copy_elem1.ll	29	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P16_i64_alloca_float_views.ll	24	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P17a_iv_param_i64.ll	34	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P17b_iv_param_i64.ll	34	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P17c_iv_param_i64.ll	34	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P18a_direct_elem_i64.ll	36	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P18b_direct_elem_i64.ll	36	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P19a_iv_bitcast_param.ll	35	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P19b_iv_bitcast_param.ll	35	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P1_store_half.ll	41	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P2_store_float.ll	41	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P3_store_v2f.ll	41	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P4_load_float.ll	41	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P5_load_v2f.ll	42	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P6_bytes_into_v2f.ll	26	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P7_i64_copy.ll	27	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P8_load_float_hi.ll	42	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/fixtures/rsprobe/P9_store_float_hi.ll	42	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/interface.rs	2687	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/intrinsics.rs	3108	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/misc.rs	1396	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/mod.rs	209	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/textures.rs	8502	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/threadgroup.rs	3276	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tests/types.rs	3295	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tir/lower.rs	510	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tir/mod.rs	2497	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tir/operands.rs	610	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tir/phi_edit.rs	567	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tir/pointee.rs	188	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tir/rename.rs	277	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tir/storage.rs	259	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tir/substitute.rs	514	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/tir/terminator.rs	135	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/vec_scalar_merge.rs	994	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/native/wg_atomic.rs	829	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/access/README.md	21	docs	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/access/access_chain.rs	1687	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/access/access_provenance.rs	1320	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/access/byte_aggregate.rs	1201	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/access/dynamic_reinterpret.rs	2211	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/access/index_remap.rs	1083	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/access/mod.rs	3179	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/access/private_memory.rs	508	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/access/raw_byte.rs	2565	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/access/vector_subword.rs	1359	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/access/workgroup.rs	816	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/README.md	18	docs	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/agx_emask.rs	1144	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/bfloat_glsl.rs	321	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/block_split.rs	285	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/conversions.rs	644	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/dispatch_texture.rs	1752	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/float_imageblock.rs	1873	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/imageblock_block_copy.rs	462	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/images/atomic.rs	407	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/images/fetch_coord.rs	923	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/images/gather.rs	441	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/images/mod.rs	291	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/images/query_offset.rs	379	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/images/resolve.rs	964	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/images/sample.rs	1285	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/images/sample_depth.rs	762	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/images/write_read.rs	627	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/integer_simd.rs	1850	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/matrix.rs	3594	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/mod.rs	287	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/rawbyte_unary.rs	1107	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/ray_query.rs	1518	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/reduce_bitops.rs	937	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/sample_positions.rs	181	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/shuffle.rs	809	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/air_calls/tensor.rs	79	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/aliased_imageblock.rs	256	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/byte_words.rs	723	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/emitted_inline/mod.rs	1964	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/emitted_inline/tests.rs	1698	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/finalize.rs	682	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/latch_trampoline.rs	411	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/ldhoist.rs	581	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/loop_budget.rs	714	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/lowering_regression_tests.rs	6741	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/mod.rs	3069	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/module_cleanup.rs	1589	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/prune.rs	242	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resource_phi_fold.rs	608	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resources/README.md	20	docs	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resources/bindings.rs	461	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resources/buffer_addresses.rs	323	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resources/collapse.rs	2399	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resources/discovery.rs	1036	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resources/mod.rs	21	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resources/query_select.rs	451	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resources/rewrites/air_struct_remap.rs	1007	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resources/rewrites/mod.rs	2231	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resources/rewrites/private_atomics.rs	1115	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resources/rewrites/raw_word_rewrite.rs	2112	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resources/rewrites/structural_load.rs	615	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resources/selected_load.rs	721	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/resources/texture_array.rs	1228	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/spirv_cfg.rs	44	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/stage_input/README.md	15	docs	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/stage_input/air_layout.rs	448	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/stage_input/decorations.rs	75	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/stage_input/kernel_grid.rs	198	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/stage_input/kernel_values.rs	141	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/stage_input/layout.rs	350	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/stage_input/mod.rs	3221	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/stage_output/README.md	12	docs	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/stage_output/mod.rs	1262	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/subgroup_materialize.rs	223	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/type_singletons.rs	74	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/value_queries.rs	232	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/widen_shl.rs	322	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/workgroup/README.md	14	docs	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/workgroup/atomic_loop.rs	451	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/workgroup/mod.rs	11	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/workgroup/pointers.rs	873	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/workgroup/types.rs	499	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passes/workgroup/zero_initialize.rs	501	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/passthrough.rs	739	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/reflect/footprint.rs	1550	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/reflect/mod.rs	3283	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/reflect/nonwritable.rs	220	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/reflect/tests.rs	2146	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_binary/README.md	24	docs	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_binary/decode_generated.rs	612	generated	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_binary/decoder.rs	103	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_binary/enumerant_requirements_generated.rs	5466	generated	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_binary/error.rs	1	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_binary/error_generated.rs	370	generated	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_binary/grammar.rs	811	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_binary/grammar_generated.rs	8437	generated	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_binary/mod.rs	11	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_binary/parse_generated.rs	706	generated	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_binary/parser.rs	247	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_binary/type_tracker.rs	44	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_disassemble_generated.rs	503	generated	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_module.rs	1131	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_operand.rs	227	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_operand_display_generated.rs	71	generated	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/spirv_variable_ptr.rs	1427	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/testdata/m42_mesh.ll	186	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/testdata/mesh_object.ll	248	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/tools.rs	463	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/src/types.rs	37	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/argument_buffer_wrapped_resource.rs	388	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/bool_vector_compare.rs	60	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/bounded_growth.rs	167	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/declared_capabilities_are_needed.rs	325	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/deterministic_output.rs	244	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/env_registry.rs	85	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/gl/ivec3_uniform_through_float_gep.ll	61	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/gl/sampler2d_param_chosen_by_constant.ll	67	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/hwrt/rt3-f_rt.ll	225	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/hwrt/rt3-rq.ll	225	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/hwrt/rt3-rq_arg.ll	225	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/hwrt/rt3-v_plain.ll	225	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/hwrt/rt3-v_rt.ll	225	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/hwrt/rt3b-rq_aos.ll	206	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/hwrt/rt3b-rq_dev.ll	206	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/hwrt/rt3b-rq_off.ll	206	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/hwrt/rt3b-rq_sel.ll	206	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/hwrt/rt3b-rq_unq.ll	206	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/leaf_memcpy/sp1.ll	131	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/opencl/conv_imageui.ll	161	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/opencl/helper_struct_i64_fields.ll	66	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fixtures/stage_output/buffer_return_alias.ll	308	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fragment_barycentric_coord.rs	112	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fragment_input_interpolation.rs	138	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fragment_sample_mask.rs	209	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/fragment_sample_positions.rs	249	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/function_local_padding_memset.rs	59	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/gated_buffer_bindings.rs	155	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/gated_stage_inputs.rs	145	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/gated_system_values.rs	190	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/gated_texture_descriptor_slots.rs	371	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/gated_varying_locations.rs	126	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/gl_uniform_vector_loads.rs	47	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/hwrt_rt_stages.rs	257	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/leaf_memcpy_interior_field.rs	62	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/live_module_scope_variables.rs	143	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/loop_budget_changes_the_module.rs	110	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/must_fallback.rs	960	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/name_independence.rs	448	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/no_module_needs_a_geometry_stage.rs	75	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/nonwritable_covers_the_module.rs	469	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/opencl_helper_struct_fields.rs	20	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/opencl_image_element.rs	30	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/opencl_work_size.rs	45	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/reflection_access_covers_the_module.rs	235	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/reflection_covers_declared_bindings.rs	1008	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/reflection_describes_each_resource_once.rs	172	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/reflection_describes_the_image_it_binds.rs	332	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/reflection_sizes_argument_buffer_handles.rs	263	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/selected_struct_gep_off_optional_resource.rs	200	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/stage_output_type_alias.rs	23	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/stage_root_attributes.rs	279	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/supplied_fc_defined_folds.rs	86	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/vertex_output_declared_locations.rs	133	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/translator/tests/vertex_position_invariance.rs	101	test	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/wrapper/Cargo.lock	240	dependency-lock	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/wrapper/Cargo.toml	13	build	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/wrapper/src/align_guard.rs	181	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/wrapper/src/buffer_addresses.rs	439	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/wrapper/src/g2_inline.rs	287	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/wrapper/src/lib.rs	840	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/wrapper/src/linearize.rs	282	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/wrapper/src/table_ubo.rs	153	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/wrapper/src/wide_loads.rs	305	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
