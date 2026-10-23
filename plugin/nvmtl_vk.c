@@ -5578,6 +5578,9 @@ void nvmtl_vk_pt_note(nvk_cmdbuf *c, uint32_t fs)
 }
 int nvmtl_pt_armed(void)
 {
+#if NVMTL_RELEASE
+    return 0;   // release builds refuse the request file (nvmtl_rel_access): no clock read on every render pass
+#endif
     static uint64_t next; uint64_t now = clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW);
     if (g_pt_left <= 0 && now >= next) { next = now + 250000000ull;
         if (access("/tmp/nvmtl-passtime-request", F_OK) == 0) { unlink("/tmp/nvmtl-passtime-request"); g_pt_left = 400; nvlog("passtime: ARMED for 400 passes"); } }

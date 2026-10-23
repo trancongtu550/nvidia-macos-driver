@@ -1041,7 +1041,11 @@ static void nvmtl_surface_in_for_cb(NVMTLCommandBuffer *cb, NVMTLTexture *t) {
     [t nvmtlSurfaceIn];
 }
 static unsigned nvmtl_surf_id(NVMTLTexture *t) { NVMTLTexture *r = (t && t->_parent) ? t->_parent : t; return (r && r->_surf) ? (unsigned)IOSurfaceGetID(r->_surf) : 0u; }
-static int nvmtl_noseed(void) { static uint64_t next; static int on; uint64_t now = clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW);
+static int nvmtl_noseed(void) {
+#if NVMTL_RELEASE
+    return 0;   // release builds refuse the request file (nvmtl_rel_access), so the experiment never turns on
+#endif
+    static uint64_t next; static int on; uint64_t now = clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW);
     if (now >= next) { next = now + 250000000ull; int was = on; on = access("/tmp/nvmtl-noseed", F_OK) == 0;
         if (on && !was) nvlog("G17 EXPERIMENT ON: surface-out writes under a read-only lock, the IOSurface seed does not move");
         if (!on && was) nvlog("G17 experiment off: surface-out bumps the seed again"); }
@@ -1057,6 +1061,9 @@ static void nvmtl_census(const char *what, uint32_t w, uint32_t h, int surf) {
 }
 static void nvmtl_frame_dump(const char *tag, const void *base, size_t row, uint32_t w, uint32_t h);
 static void nvmtl_surface_cpu_dump(NVMTLTexture *rt) {
+#if NVMTL_RELEASE
+    (void)rt; return;   // release builds refuse the request file (nvmtl_rel_access): no clock read on every texture bind
+#endif
     static uint64_t next; static int on;
     uint64_t now = clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW);
     if (now >= next) { next = now + 250000000ull; on = access("/tmp/nvmtl-dump-request", F_OK) == 0; }
