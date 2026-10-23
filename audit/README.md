@@ -20,6 +20,7 @@ Thư mục này lưu tiến độ audit để các lượt sau không đọc l�
 | `claude/vigilant-mayer-ptq05r` | `75e2e28` | Script chẩn đoán chỉ đọc + thư mục `audit/` |
 | `claude/vigilant-mayer-ptq05r-t6-subwho-race` | `75e2e28` | F12/T6: khóa cho `nvmtl_subwho_note` + `tools/test_subwho_census.py` (`b38e6b3`); test chạy được trên macOS, không che lỗi biên dịch, đo overhead `tools/bench_subwho_census.py` (`ccdf592`) |
 | `claude/vigilant-mayer-ptq05r-plugin-build` | `75e2e28` | B1: `tools/nm_build_plugin.sh` + harness, `tools/test_plugin_abi_contract.py` (`a1588ac`) |
+| `claude/vigilant-mayer-ptq05r-integration` | `75e2e28` | Gom T2, T6, công cụ build/test và 4 tối ưu CPU (bind index/vertex trùng, khóa tag IOSurface, poll debug trong release), mỗi thay đổi một commit; bàn giao: `audit/handoff.md` trên branch đó (`9cc2138`) |
 | `claude/vigilant-mayer-ptq05r-t2-diag-counters` | `3c9c1d3` | T2: script đọc thêm counter có sẵn, allowlist `nvrm610.conf`, cảnh báo boot-arg + harness `tools/test_nm_readonly_diagnostics.{sh,py}` (commit `8adfb3b`) |
 
 ## Base
