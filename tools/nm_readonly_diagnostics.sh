@@ -6,9 +6,12 @@
 # terminal only. Anything the running driver or the account does not provide is printed as "THIẾU: ..." and the rest
 # continues.
 #
-#   status            driver versions (loaded and on disk), display mode, accelerators, nvrm-flip, BAR1, runtime switches
-#   measure <label>   reads the NVAccel/NVRMFB counters, waits 30 s while you drag or scroll, reads them again and prints
-#                     the deltas, then the kernel log lines of that window, then (separately) the lines logged in the
+#   status            driver versions (loaded and on disk), display mode, accelerators, nvrm-flip, BAR1, runtime switches,
+#                     debug boot-args that change the display path or its cost, and the plugin knobs of nvrm610.conf that
+#                     bear on presenting (an allowlist: other keys are only counted, the file is never printed whole)
+#   measure <label>   reads the NVAccel/NVRMFB/NVRM counters, waits 30 s while you drag or scroll, reads them again and
+#                     prints the deltas (VRAM grants, surface allocations and interrupts included) and the VRAM gauges
+#                     before and after, then the kernel log lines of that window, then (separately) the lines logged in the
 #                     12 s after it
 #
 # Run it with bash (macOS's zsh does not split $NM_KEYS into words):
@@ -41,6 +44,7 @@ nm_status() {
   sw_vers 2>/dev/null || echo "THIẾU: sw_vers"
   sysctl -n hw.model kern.osversion 2>/dev/null
   echo "boot-args (kern.bootargs): $(sysctl -n kern.bootargs 2>/dev/null)"
+  nm_bootarg_warn "$(sysctl -n kern.bootargs 2>/dev/null)"
   echo "boot time: $(sysctl -n kern.boottime 2>/dev/null | sed -E 's/^\{ sec = ([0-9]+).*/\1/' | xargs -I{} date -r {} '+%Y-%m-%d %H:%M:%S')"
   nm_or "$(csrutil status 2>/dev/null | head -n 1)" "csrutil status"
 
@@ -89,24 +93,89 @@ nm_status() {
 
   nm_say "A4. Log kernel từ lúc boot: BAR1, auto-go, phiên bản (địa chỉ đã che)"
   nm_or "$(log show --last boot --style compact --predicate 'process == "kernel" AND (eventMessage CONTAINS "NVRM-xnu: bar1" OR eventMessage CONTAINS "NVRM-xnu: auto-go" OR eventMessage CONTAINS "NVRM-xnu: gpu profile" OR eventMessage CONTAINS "NVRM-xnu: NVRM kext")' 2>&1 | grep -E 'NVRM-xnu|log:|rror' | sed -E 's/0x[0-9a-fA-F]{7,}/0x<addr>/g' | nm_clip 40)" "log kernel từ lúc boot (log đã xoay vòng, hoặc tài khoản không đọc được log)"
+
+  nm_say "A5. Khóa plugin trong nvrm610.conf liên quan tới present (chỉ khóa trong allowlist; KHÔNG in nguyên file)"
+  nm_conf
   nm_share_note
+}
+
+# Debug boot-args the kexts read (v2.5.3) that change the display path or add work to it. Each is warned about with the
+# place that reads it; the line above already printed boot-args as the system has them.
+nm_bootarg_warn() {
+  local t n v hit=0 toks
+  read -r -a toks <<< "$1"   # split on blanks without glob expansion
+  for t in ${toks[@]+"${toks[@]}"}; do
+    n=${t%%=*}; v=; [ "$n" != "$t" ] && v=${t#*=}
+    case $n in
+      -nvrmnoflip)     echo "   CHÚ Ý: -nvrmnoflip: flip zero-copy không tự bật, present đi đường copy (NVRM.cpp:817)"; hit=1 ;;
+      -nvrmsmallbar)   echo "   CHÚ Ý: -nvrmsmallbar: BAR1 bị ép còn 256 MB để thử đường BAR nhỏ (NVRM.cpp:1000-1005)"; hit=1 ;;
+      -nvaccelverbose) echo "   CHÚ Ý: -nvaccelverbose: NVAccel ghi log cho mỗi lần cấp phát (nvrm-accel.cpp:47)"; hit=1 ;;
+      -nvfbsurvey)     echo "   CHÚ Ý: -nvfbsurvey: NVRMFB khảo sát BAR1 lúc khởi động (nvrm-fb.cpp:1104)"; hit=1 ;;
+      nvfbsample|nvhud|nvfbtrace|nvrmdiag)
+        # a bare numeric boot-arg reads as 1
+        [ -z "$v" ] && v=1
+        [ "$v" = 0 ] && continue
+        case $n in
+          nvfbsample) echo "   CHÚ Ý: nvfbsample=$v: bật bộ lấy mẫu của NVRMFB (nvrm-fb.cpp:2537)" ;;
+          nvhud)      echo "   CHÚ Ý: nvhud=$v: bật HUD vẽ lên màn hình (nvrm-fb.cpp:2527)" ;;
+          nvfbtrace)  echo "   CHÚ Ý: nvfbtrace=$v: bật công bố trace của NVRMFB (nvrm-fb.cpp:1496)" ;;
+          nvrmdiag)   echo "   CHÚ Ý: nvrmdiag=$v: bật sysctl chẩn đoán in địa chỉ vật lý, chỉ root đọc (os-xnu2.cpp:332-340)" ;;
+        esac; hit=1 ;;
+      nvhwvbl) [ "$v" = 0 ] && { echo "   CHÚ Ý: nvhwvbl=0: tắt vblank phần cứng, timer làm VBL (nvrm-fb.cpp:2518)"; hit=1; } ;;
+    esac
+  done
+  [ $hit = 1 ] || echo "   (không thấy boot-arg debug nào trong danh sách kiểm: -nvrmnoflip -nvrmsmallbar -nvaccelverbose -nvfbsurvey nvfbsample nvhud nvfbtrace nvrmdiag nvhwvbl=0)"
+}
+
+# Plugin knobs that bear on presenting and waiting, as the plugin reads them (NVMTLObjects.m:84-127): leading blanks
+# dropped, '#' lines skipped, key=value, the first entry of a key wins, only NVMTL_/NVK_/NVRM_ keys are taken. A value
+# is printed, quoted as the plugin takes it, only when it is a short plain token; nothing outside the allowlist is printed, only counted.
+NM_CONF_ALLOW="NVRM_EVENT_WAIT NVRM_ASYNC NVMTL_PERF_LOG NVMTL_SURFIN_UPLOAD NVMTL_GSUB_INFLIGHT NVMTL_ASYNC_COMMIT NVMTL_COMMIT_AHEAD NVMTL_EVFOLD NVMTL_ASYNC_TEX_UPLOAD NVMTL_PRESUBMIT_PROLOGUE NVMTL_WS_WAIT_COMPLETION NVMTL_SHARED_VRAM NVMTL_NO_SURFACE_SHARE NVMTL_NO_SURFACE_PAGEOFF NVMTL_DEBUG_WAIT_EACH NVRM_XNU_TRACE NVRM_GSUB_LOG NVK_DEBUG"
+nm_conf() {
+  local f=${1:-/Library/GPUBundles/nvmtl/nvrm610.conf}
+  [ -e "$f" ] || { echo "THIẾU: $f không có (plugin chạy với giá trị mặc định)"; return 0; }
+  [ -r "$f" ] || { echo "THIẾU: không đọc được $f"; return 0; }
+  awk -v A="$NM_CONF_ALLOW" '
+    BEGIN { n = split(A, w, " "); for (i = 1; i <= n; i++) allow[w[i]] = 1 }
+    { sub(/^[ \t]+/, "") }
+    /^#/ || $0 == "" { next }
+    { e = index($0, "="); if (!e) next
+      k = substr($0, 1, e - 1); v = substr($0, e + 1); sub(/[ \t]+$/, "", k); sub(/[\r\n \t]+$/, "", v)
+      if (k !~ /^(NVMTL_|NVK_|NVRM_)/) { ignored++; next }
+      if (k in seen) { if (k in allow) dup++; next }
+      seen[k] = 1
+      if (!(k in allow)) { other++; next }
+      shown++
+      if (v ~ /^ *[A-Za-z0-9._-]+$/ && length(v) <= 16) printf "%-28s = \"%s\"\n", k, v
+      else printf "%-28s = <không in: giá trị không phải chuỗi ngắn đơn giản>\n", k }
+    END {
+      if (!shown) print "(không có khóa nào trong allowlist: các khóa đó đang ở giá trị mặc định)"
+      printf "Khóa plugin khác (không in): %d; dòng plugin bỏ qua vì không có tiền tố NVMTL_/NVK_/NVRM_: %d", other, ignored
+      if (dup) printf "; khóa allowlist lặp lại (plugin chỉ lấy lần đầu): %d", dup
+      print ""
+      print "Plugin đọc file một lần lúc nạp: tiến trình đã chạy trước khi file đổi vẫn dùng giá trị cũ" }' "$f"
 }
 
 # Cumulative counters first, then the three since-boot maxima (named *_max / *_max_us). The maxima cannot be reset, so
 # a measurement only says whether they rose during the window; they are never percentiles.
-NM_KEYS="debug.nvaccel_iop_ok debug.nvaccel_iop_flips debug.nvaccel_iop_async_flips debug.nvaccel_iop_async_drop debug.nvaccel_iop_async_refused debug.nvaccel_iop_late debug.nvaccel_iop_flip_lock debug.nvaccel_iop_flip_novram debug.nvaccel_iop_flip_stale debug.nvaccel_iop_flip_unwritten debug.nvaccel_iop_flip_refused debug.nvaccel_iop_flip_home debug.nvaccel_iop_copy_skip debug.nvaccel_iop_copy_unwritten debug.nvaccel_iop_blank debug.nvaccel_iop_fail debug.nvaccel_iop_src_surf debug.nvaccel_iop_src_res debug.nvaccel_surface_gpu_marks debug.nvaccel_surface_gpu_waits debug.nvaccel_surface_gpu_timeouts debug.nvaccel_vm_refused debug.nvrmfb_flip_n debug.nvrmfb_flip_us_sum debug.nvrmfb_flip_latch_waits debug.nvrmfb_flip_latch_deferred debug.nvrmfb_flip_latch_late debug.nvrmfb_flip_latch_timeouts debug.nvaccel_surface_gpu_wait_max_us debug.nvrmfb_flip_latch_max_us debug.nvrmfb_flip_us_max"
-nm_snap() { for k in $NM_KEYS; do v=$(sysctl -n "$k" 2>/dev/null); [ -n "$v" ] || v=THIEU; echo "$k $v"; done; }
+NM_KEYS="debug.nvaccel_iop_ok debug.nvaccel_iop_flips debug.nvaccel_iop_async_flips debug.nvaccel_iop_async_drop debug.nvaccel_iop_async_refused debug.nvaccel_iop_late debug.nvaccel_iop_flip_lock debug.nvaccel_iop_flip_novram debug.nvaccel_iop_flip_stale debug.nvaccel_iop_flip_unwritten debug.nvaccel_iop_flip_refused debug.nvaccel_iop_flip_home debug.nvaccel_iop_copy_skip debug.nvaccel_iop_copy_unwritten debug.nvaccel_iop_blank debug.nvaccel_iop_fail debug.nvaccel_iop_src_surf debug.nvaccel_iop_src_res debug.nvaccel_surface_gpu_marks debug.nvaccel_surface_gpu_waits debug.nvaccel_surface_gpu_timeouts debug.nvaccel_vm_refused debug.nvaccel_vm_alloc debug.nvaccel_vm_alloc_bytes debug.nvaccel_vm_dealloc debug.nvaccel_vm_dealloc_bytes debug.nvaccel_vm_parked debug.nvaccel_vm_unparked debug.nvaccel_vm_park_released debug.nvaccel_res_new debug.nvaccel_res_free debug.nvaccel_map_commit debug.nvaccel_map_release debug.nvaccel_map_free debug.nvrmfb_vram_grants debug.nvrmfb_vram_grant_bytes debug.nvrmfb_vram_releases debug.nvrmfb_vram_release_bytes debug.nvrm_isr_count debug.nvrm_isr_handled debug.nvrm_evt_posts debug.nvrm_evt_waits debug.nvrmfb_flip_n debug.nvrmfb_flip_us_sum debug.nvrmfb_flip_latch_waits debug.nvrmfb_flip_latch_deferred debug.nvrmfb_flip_latch_late debug.nvrmfb_flip_latch_timeouts debug.nvaccel_surface_gpu_wait_max_us debug.nvrmfb_flip_latch_max_us debug.nvrmfb_flip_us_max"
+# Gauges: the bytes held now, not counts, so they are shown before -> after with no delta or rate. NVRMFB registers its
+# nvrmfb_vram_* entries at the first VRAM grant (nvrmfbInstallSysctl), so they can be missing until then.
+NM_GAUGES="debug.nvrmfb_vram_budget_bytes debug.nvrmfb_vram_mapped_bytes debug.nvrmfb_vram_display_bytes"
+nm_snap() { for k in $NM_KEYS $NM_GAUGES; do v=$(sysctl -n "$k" 2>/dev/null); [ -n "$v" ] || v=THIEU; echo "$k $v"; done; }
 # nm_delta <label> <seconds> <before> <after>: the deltas of one window. Both reads of every counter must be integers;
 # a counter the running driver lacks (THIEU) or a garbled read on either side is reported instead of counting as 0.
 nm_delta() {
-  { printf '%s\n' "$3" | sed 's/^/B /'; printf '%s\n' "$4" | sed 's/^/A /'; } | awk -v T="$2" -v L="$1" '
+  { printf '%s\n' "$3" | sed 's/^/B /'; printf '%s\n' "$4" | sed 's/^/A /'; } | awk -v T="$2" -v L="$1" -v G="$NM_GAUGES" '
     function num(x) { return x ~ /^-?[0-9]+$/ }
     function side(x, y) { return (x=="THIEU" && y=="THIEU") ? "trước và sau" : (x=="THIEU" ? "trước" : "sau") }
     function why(x, y) { return (x=="THIEU" || y=="THIEU") ? "THIẾU (driver đang chạy không có counter này ở lượt đọc " side(x, y) ")" : "KHÔNG HỢP LỆ (giá trị đọc được không phải số nguyên)" }
     $1=="B"{b[$2]=$3; o[++n]=$2; next} $1=="A"{a[$2]=$3}
-    END{ printf "-- %s: T = %d s (độ phân giải 1 s)\n", L, T
+    END{ ng = split(G, gw, " "); for (i = 1; i <= ng; i++) gauge[gw[i]] = 1
+      printf "-- %s: T = %d s (độ phân giải 1 s)\n", L, T
       for(i=1;i<=n;i++){k=o[i]; s=k; sub(/^debug\./,"",s)
         if(!num(b[k]) || !num(a[k])){printf "%-34s %s\n", s, why(b[k], a[k]); continue}
+        if(k in gauge){printf "%-34s giá trị tức thời: %s -> %s (không phải counter: không tính delta)\n", s, b[k], a[k]; continue}
         if(s ~ /_max(_us)?$/){printf "%-34s cực đại từ lúc boot: %s -> %s%s\n", s, b[k], a[k], (a[k]+0>b[k]+0 ? "  (TĂNG trong lượt này)" : (a[k]+0<b[k]+0 ? "  (GIẢM: counter bị reset, bỏ dòng này)" : "  (không đổi)")); continue}
         d=a[k]-b[k]; printf "%-34s delta %12.0f  %9.1f /s%s\n", s, d, (T>0?d/T:0), (d<0?"  (ÂM: counter bị reset/wrap, bỏ dòng này)":"") }
       kn="debug.nvrmfb_flip_n"; ks="debug.nvrmfb_flip_us_sum"
