@@ -32,18 +32,21 @@ fixture = r'''
 #include <stdlib.h>
 #include <string.h>
 typedef unsigned long NSUInteger;
-typedef struct S { int refs; int immortal; char text[48]; } *CFStringRef;
+// As in CoreFoundation, a CFStringRef points at a const object. A CFSTR literal is its own immutable static object,
+// initialised at compile time and never written (CFRetain and CFRelease leave immortal objects alone before touching
+// anything), so threads share nothing writable through it. Only strings made at run time are counted and freed.
+struct S { int refs; int immortal; char text[48]; };
+typedef const struct S *CFStringRef;
 typedef const void *CFTypeRef;
-static struct S lit = { 1, 1, "" };
-#define CFSTR(s) (strcpy(lit.text, s), &lit)
+#define CFSTR(s) ({ static const struct S cfstr_ = { 1, 1, s }; (CFStringRef)&cfstr_; })
 static long live, made;
 static CFStringRef CFStringCreateWithFormat(void *a, void *o, CFStringRef fmt, ...) {
-    (void)a; (void)o; CFStringRef s = calloc(1, sizeof *s); va_list ap; va_start(ap, fmt);
-    vsnprintf(s->text, sizeof s->text, "NVMTLVramAt:p%lu", ap); va_end(ap);
+    (void)a; (void)o; struct S *s = calloc(1, sizeof *s); va_list ap; va_start(ap, fmt);
+    vsnprintf(s->text, sizeof s->text, fmt->text, ap); va_end(ap);   // the plugin's own format string
     s->refs = 1; __atomic_add_fetch(&live, 1, __ATOMIC_RELAXED); __atomic_add_fetch(&made, 1, __ATOMIC_RELAXED); return s; }
-static CFTypeRef CFRetain(CFTypeRef p) { CFStringRef s = (CFStringRef)p;
+static CFTypeRef CFRetain(CFTypeRef p) { struct S *s = (struct S *)p; if (s->immortal) return p;
     if (__atomic_fetch_add(&s->refs, 1, __ATOMIC_ACQ_REL) <= 0) { puts("FAILED: retain of a freed key"); exit(3); } return p; }
-static void CFRelease(CFTypeRef p) { CFStringRef s = (CFStringRef)p; if (s->immortal) return;
+static void CFRelease(CFTypeRef p) { struct S *s = (struct S *)p; if (s->immortal) return;
     int r = __atomic_sub_fetch(&s->refs, 1, __ATOMIC_ACQ_REL);
     if (r < 0) { puts("FAILED: key released more often than retained"); exit(3); }
     if (r == 0) { __atomic_sub_fetch(&live, 1, __ATOMIC_RELAXED); free(s); } }
@@ -54,7 +57,8 @@ static int use(NSUInteger plane) { CFStringRef k = nvmtl_vram_tag_key(plane); ch
 static unsigned ready;
 static void *worker(void *arg) { (void)arg; __atomic_add_fetch(&ready, 1, __ATOMIC_ACQ_REL);
     while (__atomic_load_n(&ready, __ATOMIC_ACQUIRE) < 8) sched_yield();
-    for (int j = 0; j < 20000; j++) if (!use((NSUInteger)(j % 7))) { puts("FAILED: wrong key"); exit(3); } return NULL; }
+    for (int j = 0; j < 20000; j++) if (!use((NSUInteger)(j % 7))) { puts("FAILED: wrong key"); exit(3); }
+    return NULL; }
 int main(int argc, char **argv) {
     if (argc > 1 && !strcmp(argv[1], "threads")) {
         pthread_t th[8]; for (int t = 0; t < 8; t++) pthread_create(&th[t], NULL, worker, NULL);
@@ -67,6 +71,9 @@ int main(int argc, char **argv) {
     puts("ok"); return 0;
 }
 '''
+
+assert 'strcpy' not in fixture and '#define CFSTR(s) ({ static const struct S cfstr_' in fixture, \
+    'CFSTR must be an immutable object of its own, never written by the threads that share it'
 
 
 def compilers():
@@ -88,7 +95,7 @@ def sanitizer_cc(d, san):
     return None
 
 
-def build_run(code, arm, san=None):
+def build_run(code, arm, san=None, werror=True):
     with tempfile.TemporaryDirectory() as d:
         cc = sanitizer_cc(d, san) if san else (compilers() or [None])[0]
         if cc is None:
@@ -96,10 +103,14 @@ def build_run(code, arm, san=None):
         src = pathlib.Path(d) / 't.c'
         src.write_text(fixture.replace('HELPER', code))
         exe = pathlib.Path(d) / 't'
-        flags = ['-std=gnu11', '-O1', '-g', '-pthread', '-Werror=implicit-function-declaration'] + (['-fsanitize=' + san] if san else [])
+        # -Werror: a write through a const CFStringRef (or any other warning) fails the build with gcc and clang alike
+        # (the negative controls are mutated on purpose and may leave unused variables: they build without -Werror)
+        flags = ['-std=gnu11', '-O1', '-g', '-pthread', '-Wall', '-Wno-format-nonliteral'] + (['-Werror'] if werror else []) \
+                + (['-fsanitize=' + san] if san else [])
         c = subprocess.run([cc] + flags + ['-o', str(exe), str(src)], capture_output=True, text=True)
         if c.returncode:
             raise AssertionError('the fixture does not build with %s: %s' % (cc, c.stderr[-1500:]))
+        print('[%s, %s, %s]' % (cc, san or 'no sanitizer', arm))
         r = subprocess.run([str(exe), arm], capture_output=True, text=True, timeout=120)
         return r.returncode, r.stdout + r.stderr
 
@@ -125,7 +136,7 @@ class VramTagKey(unittest.TestCase):
     def test_control_no_retain(self):
         bad = helper.replace('return (CFStringRef)CFRetain(k);', 'return k;')
         self.assertNotEqual(bad, helper)
-        rc, out = build_run(bad, 'single')
+        rc, out = build_run(bad, 'single', werror=False)
         self.assertNotEqual(rc, 0, 'a key handed out without CFRetain went unseen:\n' + out)
         print('control fires (no CFRetain)')
 
@@ -134,7 +145,7 @@ class VramTagKey(unittest.TestCase):
         else { CFRelease(made); k = seen; }''', '''        for (volatile int spin = 0; spin < 20000; spin++) {}
         keys[plane] = made; k = made;''')
         self.assertNotEqual(bad, helper)
-        rc, out = build_run(bad, 'threads')
+        rc, out = build_run(bad, 'threads', werror=False)
         self.assertNotEqual(rc, 0, 'a racing plain store went unseen:\n' + out)
         print('control fires (plain store: %s)' % out.strip().splitlines()[0])
 
