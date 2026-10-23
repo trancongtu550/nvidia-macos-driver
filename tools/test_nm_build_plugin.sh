@@ -144,6 +144,24 @@ has "release diagnostics absent" "$out" "ok    release has no 'fps file'"
 has "live features present" "$out" "ok    feature 'dirty-only bindings'"
 has "says it is not installed" "$out" "built (not installed, not signed)"
 [ -f "$T/o1/build-info.txt" ] && [ -f "$T/o1/src/plugin/NVMTLDevice.m" ] && ok "sources and build-info in the output directory" || bad "output layout" "$(ls -R "$T/o1")"
+has "the default is the release level" "$out" "variant         O1 (the release build's level)"
+hasnt "the default never drops assertions" "$log" "-DNDEBUG"
+
+echo "== the -O2 A/B variant"
+o1=$(grep -- '-framework' "$FAKE_LOG" | tail -n 1)
+: > "$FAKE_LOG"; run build HEAD "$T/oO2" --vk-include "$T/vk" --opt O2
+rcis "O2 build: rc 0" $rc 0 "$out"
+o2=$(cat "$FAKE_LOG")
+has "  the compiler gets -O2" "$o2" " -O2 "; hasnt "  and not -O1" "$o2" " -O1 "
+hasnt "  and assertions stay (no -DNDEBUG)" "$o2" "-DNDEBUG"
+if [ "$(printf '%s' "$o1" | sed -e 's/ -O1 / -O2 /' -e "s#$T/o1/#X/#g")" = "$(printf '%s' "$o2" | sed "s#$T/oO2/#X/#g")" ]; then
+  ok "  and nothing else on the command line changes"; else bad "  the O2 command line differs elsewhere" "$o1
+$o2"; fi
+has "  build-info names the variant" "$(cat "$T/oO2/build-info.txt")" "variant         O2 (A/B variant; the release build is -O1)"
+has "  and its flags" "$(cat "$T/oO2/build-info.txt")" "-mmacosx-version-min=15.0 -bundle -fobjc-arc -O2 -DNVMTL_RELEASE=1"
+has "  the artifact checks still run" "$out" "ok    minos 15.0"
+run build HEAD "$T/oO3" --vk-include "$T/vk" --opt O3; has "an unknown level is refused" "$out" "--opt takes O1"
+gone "  before the output directory is made" "$T/oO3"
 
 echo "== each artifact check fails on its own"
 FAKE_ARCH="x86_64 arm64" run build HEAD "$T/o2" --vk-include "$T/vk"; has "two architectures" "$out" "FAIL  arch 'x86_64 arm64'"; rcis "two architectures: rc 1" $rc 1 "$out"

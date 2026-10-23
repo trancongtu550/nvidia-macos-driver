@@ -1,5 +1,5 @@
 #!/bin/bash
-# nm_build_plugin.sh build <git-rev> <out-dir> --vk-include <dir> [--twice]
+# nm_build_plugin.sh build <git-rev> <out-dir> --vk-include <dir> [--twice] [--opt O1|O2]
 # nm_build_plugin.sh check-installed <built NVMTLDriver> [<git-rev>]
 #
 # A local, repeatable build of the release NVMTLDriver binary on a Mac, with the flags of build/build_plugin_release.sh
@@ -13,6 +13,8 @@
 #                     release markers of build/build_plugin.sh (live features present, diagnostics absent), compiler
 #                     warnings counted. build-info.txt records the tool versions, the Vulkan header version and hashes.
 #                     --twice builds a second time in a second directory and says whether the two binaries are identical.
+#                     --opt O2 builds the A/B variant at -O2; the default, O1, is the release build's level. Nothing else
+#                     changes: assertions and the release checks stay as in the release build (no -DNDEBUG).
 #   check-installed   compares the built binary with the installed /Library/GPUBundles/NVMTLDriver.bundle and lists which
 #                     private entry points the plugin looks up are exported by the installed NVK and translator. Reads only.
 #                     Exits 1 when the installed plugin, NVK or translator is missing, nm cannot read one of them, or a
@@ -111,14 +113,17 @@ nm_check() {
 
 # nm_compile <src-dir> <out-binary> <vk-include> <err-file>
 nm_compile() {
-  (cd "$1" && xcrun clang "${NM_FLAGS[@]}" -I"$3" -o "$2" NVMTLDevice.m "${NM_FRAMEWORKS[@]}" 2>"$4")
+  (cd "$1" && xcrun clang "${NM_BUILD_FLAGS[@]}" -I"$3" -o "$2" NVMTLDevice.m "${NM_FRAMEWORKS[@]}" 2>"$4")
 }
 
 nm_build() {
-  local rev=${1:-} out=${2:-} vk= twice=0 here sha src a b
-  [ -n "$rev" ] && [ -n "$out" ] || nm_die "usage: build <git-rev> <out-dir> --vk-include <dir> [--twice]"
+  local rev=${1:-} out=${2:-} vk= twice=0 opt=O1 here sha src a b f
+  [ -n "$rev" ] && [ -n "$out" ] || nm_die "usage: build <git-rev> <out-dir> --vk-include <dir> [--twice] [--opt O1|O2]"
   shift 2
-  while [ $# -gt 0 ]; do case $1 in --vk-include) vk=${2:-}; shift ;; --twice) twice=1 ;; *) nm_die "unknown option $1" ;; esac; shift; done
+  while [ $# -gt 0 ]; do case $1 in --vk-include) vk=${2:-}; shift ;; --twice) twice=1 ;; --opt) opt=${2:-}; shift ;; *) nm_die "unknown option $1" ;; esac; shift; done
+  case "$opt" in O1|O2) ;; *) nm_die "--opt takes O1 (the release build's level) or O2 (the A/B variant)" ;; esac
+  # the release flags with only the optimisation level swapped
+  NM_BUILD_FLAGS=(); for f in "${NM_FLAGS[@]}"; do [ "$f" = -O1 ] && f=-$opt; NM_BUILD_FLAGS+=("$f"); done
   [ -n "$vk" ] || nm_die "--vk-include <dir> is required (the directory holding vulkan/vulkan_core.h)"
   # made absolute here, before anything changes the working directory: the compiler runs inside src/plugin
   [ -d "$vk" ] || nm_die "--vk-include $vk is not a directory"
@@ -138,7 +143,9 @@ nm_build() {
     echo "SDK             $(xcrun --show-sdk-version 2>/dev/null) $(xcrun --show-sdk-path 2>/dev/null)"
     echo "compiler        $(xcrun clang --version 2>/dev/null | head -n 1)"
     echo "Vulkan headers  VK_HEADER_VERSION $(nm_vk_version "$vk") from $vk$(git -C "$vk" rev-parse --short HEAD 2>/dev/null | sed 's/^/ (git /; s/$/)/')"
-    echo "flags           ${NM_FLAGS[*]} ${NM_FRAMEWORKS[*]}"
+    if [ "$opt" = O1 ]; then echo "variant         O1 (the release build's level)"
+    else echo "variant         $opt (A/B variant; the release build is -O1)"; fi
+    echo "flags           ${NM_BUILD_FLAGS[*]} ${NM_FRAMEWORKS[*]}"
   } > "$out/build-info.txt"
   cat "$out/build-info.txt"
   nm_compile "$src/plugin" "$out/NVMTLDriver" "$vk" "$out/build.err" || { grep ' error:' "$out/build.err" | head -20; nm_die "compile failed ($out/build.err)"; }
@@ -225,7 +232,7 @@ nm_main() {
   case "${1:-}" in
     build) shift; nm_build "$@" ;;
     check-installed) shift; nm_installed "$@" ;;
-    *) echo "usage: bash $0 build <git-rev> <out-dir> --vk-include <dir> [--twice] | check-installed <built NVMTLDriver> [<git-rev>]"; return 2 ;;
+    *) echo "usage: bash $0 build <git-rev> <out-dir> --vk-include <dir> [--twice] [--opt O1|O2] | check-installed <built NVMTLDriver> [<git-rev>]"; return 2 ;;
   esac
 }
 if [ "${BASH_SOURCE[0]}" = "$0" ]; then nm_main "$@"; fi
