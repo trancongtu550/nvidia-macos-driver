@@ -11,6 +11,7 @@ Gốc: `75e2e28` (= upstream v2.5.3). Fork cá nhân; chưa merge, chưa phát h
 | `226f0a1`, `b565d6c` | Sửa correctness (T6) — **không phải tối ưu** | Khóa cho bảng thống kê submit `nvmtl_subwho_note`; test chạy được trên macOS về mặt mã, không che lỗi biên dịch; đo overhead CPU |
 | `ba26f85`, `28525ad`, `c8112a8` | Công cụ build | `tools/nm_build_plugin.sh` (build tái lập, kiểm artifact, đối chiếu chỉ đọc), kiểm đường dẫn output, biến thể `--opt O2`; `tools/test_plugin_abi_contract.py` |
 | `ba973b2`, `2004c9c` | Công cụ test | `tools/run_tool_tests.py` (phân loại PASS/SKIP/MISSING/DEPFAIL/FAIL); `tools/check_plugin_c_delta.py` (chẩn đoán mới mà một thay đổi thêm vào `nvmtl_vk.c`, không cần macOS) |
+| `4f5adf2` và commit cuối | Test, tài liệu | Fixture `test_vram_tag_key` không còn ghi chung giữa các luồng; `tools/test_flip_counter_docs.py`; sửa mục 6-8 của tài liệu này |
 | `024bfdc` | Tối ưu CPU | Không bind lại index buffer đang có hiệu lực |
 | `d895e59` | Tối ưu CPU | Không bind lại vertex buffer đang có hiệu lực (bản ghi bị xóa mỗi khi pipeline đồ họa đổi) |
 | `218533a` | Tối ưu CPU | Khóa `CFString` của tag VRAM IOSurface tạo một lần cho mỗi plane 0-3, thay vì mỗi lần đọc tag |
@@ -44,12 +45,27 @@ Gốc: `75e2e28` (= upstream v2.5.3). Fork cá nhân; chưa merge, chưa phát h
 | Checkout | Tổng | PASS | FAIL | SKIP | MISSING (thiếu môi trường) | DEPFAIL |
 |---|---:|---:|---:|---:|---:|---:|
 | baseline `75e2e28` | 70 | 51 | 0 | 0 | 18 | 1 |
-| integration `c8112a8` | 77 | 58 | 0 | 0 | 18 | 1 |
+| integration (đầu nhánh) | 78 | 59 | 0 | 0 | 18 | 1 |
 
-- 70/70 test có sẵn giữ nguyên trạng thái; 7 test mới đều PASS: `test_bind_cache`, `test_vram_tag_key`, `test_release_debug_polls`, `test_subwho_census`, `test_nm_build_plugin`, `test_plugin_abi_contract`, `test_nm_readonly_diagnostics`.
-- 18 MISSING: cần `xcrun`/macOS SDK (11), Foundation/Metal (3), `ditto` (1), header macOS (1), bản build translator (1), một commit không có trong lịch sử công khai (1). DEPFAIL `test_primary_gpu_install`: mọi case hỏng vì thiếu `ditto`.
-- `tools/check_plugin_c_delta.py 75e2e28`: 438 chẩn đoán ở base, 438 ở integration, **0 mới** (đối chứng: một lỗi cố ý được phát hiện).
-- Revert từng commit riêng trên HEAD: 9 commit revert sạch, mỗi lần 0 FAIL; 5 commit xung đột vì commit sau sửa tiếp cùng file — revert theo nhóm phụ thuộc (mục 7) đều sạch, 0 FAIL. Revert 5 commit plugin theo thứ tự ngược đưa `plugin/` về giống hệt `75e2e28` (`git diff --stat` rỗng).
+- 70/70 test có sẵn giữ nguyên trạng thái; 8 test mới đều PASS: `test_bind_cache`, `test_vram_tag_key`, `test_release_debug_polls`,
+  `test_subwho_census`, `test_nm_build_plugin`, `test_plugin_abi_contract`, `test_nm_readonly_diagnostics`, `test_flip_counter_docs`.
+- 18 MISSING: cần `xcrun`/macOS SDK (11), Foundation/Metal (3), `ditto` (1), header macOS (1), bản build translator (1), một
+  commit không có trong lịch sử công khai (1). DEPFAIL `test_primary_gpu_install`: mọi case hỏng vì thiếu `ditto`.
+- Sanitizer thực sự chạy: **gcc 13** có runtime ThreadSanitizer và AddressSanitizer — các nhánh TSAN/ASAN của `test_vram_tag_key`
+  và `test_subwho_census` chạy bằng gcc (`cc`). **clang 18** ở đây không có runtime nào của hai sanitizer: với `CC=clang`, nhánh
+  thường chạy bằng clang còn nhánh sanitizer rơi về gcc; khi chỉ có clang 18 trong `PATH`, 2 nhánh sanitizer của
+  `test_vram_tag_key` (và 3 của `test_subwho_census`) báo SKIP kèm lý do, nhánh thường vẫn chạy. Chưa chạy trên macOS.
+- `test_vram_tag_key`: fixture không còn đối tượng ghi chung giữa các luồng (`CFSTR` là đối tượng hằng riêng, khởi tạo lúc biên
+  dịch; build với `-Wall -Werror`); đối chứng âm (không `CFRetain`, ghi thường không CAS) vẫn hỏng như kỳ vọng.
+- `tools/check_plugin_c_delta.py 75e2e28`: 438 chẩn đoán ở base, 438 ở integration, **0 mới** (đối chứng: một lỗi cố ý được phát
+  hiện). Xem giới hạn ở mục 8.
+- Revert từng commit riêng trên `c8112a8`: 9 commit revert sạch, mỗi lần 0 FAIL; 5 commit xung đột vì commit sau sửa tiếp cùng file
+  — revert theo nhóm phụ thuộc (mục 7.5) đều sạch, 0 FAIL. Revert 5 commit plugin theo thứ tự ngược đưa `plugin/` về giống hệt
+  `75e2e28`.
+- Các khối lệnh 7.1-7.3 của tài liệu này đã được chạy thử **trên một cây thư mục giả trong cloud** (công cụ macOS giả lập:
+  `stat -f` kiểu BSD, `ditto`, `codesign`, `shasum`; `sudo` và `chflags` chỉ mô phỏng), không phải trên macOS: sao lưu, từ chối sao lưu
+  lần hai, cài thử, khôi phục; và dừng đúng khi Terminal mới mất biến `ST`, bản dựng biến mất trước khi đổi chỗ, backup hoặc bảng kê
+  gốc bị sửa, thiếu binary biến thể, thiếu `/Library/NullMoth` — bản đang cài không đổi trong mọi ca dừng.
 - Tái chạy: `python3 -I tools/run_tool_tests.py . --json kq.json`; delta: `python3 -I tools/check_plugin_c_delta.py 75e2e28 --vulkan-headers <Vulkan-Headers>/include` (header Khronos chính thức).
 
 ## 5. Build trên macOS (chưa thực hiện; không tuyên bố artifact đã build thành công)
@@ -77,24 +93,16 @@ phải `rc=0`. Các thay đổi plugin không đổi entry point hay bản ghi d
 
 ## 6. Quy trình benchmark A/B thống nhất (người dùng tự làm; bước cài cần duyệt riêng)
 
-**Biến thể:** A0 = plugin gốc đang cài (bản sao lưu); A1 = baseline tự build; B = tùy chỉnh `-O1`; C = tùy chỉnh `-O2`.
-So sánh: B so với A1 (tác động của mã), C so với B (tác động của `-O2`), A1 so với A0 (khác biệt do toolchain). Thứ tự chạy
-A0 → A1 → B → C → A0 (lần A0 cuối để phát hiện trôi điều kiện).
+**Biến thể:** A0 = plugin gốc đang cài; A1 = baseline tự build; B = tùy chỉnh `-O1`; C = tùy chỉnh `-O2`. So sánh: B với A1
+(tác động của mã), C với B (tác động của `-O2`), A1 với A0 (khác biệt do toolchain). Thứ tự chạy A0 → A1 → B → C → A0 (lần A0
+cuối để phát hiện trôi điều kiện). Cài/khôi phục từng biến thể theo mục 7.
 
 **Điều kiện cố định:** 4K 144 Hz, cùng mode/HiDPI; không boot-arg debug (`status` không có dòng `CHÚ Ý`); cùng app và cửa sổ
 mở; Spotlight không đang index; khởi động lại máy trước mỗi biến thể, chờ 2 phút sau đăng nhập.
 
 **Mỗi biến thể:**
-1. Cài thử (chỉ khi đã duyệt; cần sudo):
-   ```bash
-   codesign -dv /Library/GPUBundles/NVMTLDriver.bundle 2>&1 | grep -E '^(Signature|TeamIdentifier|Format)'   # chỉ đọc
-   sudo ditto /Library/GPUBundles/NVMTLDriver.bundle ~/nm-backup/NVMTLDriver.bundle.orig     # chỉ lần đầu: bản gốc A0
-   sudo cp <thư mục biến thể>/NVMTLDriver /Library/GPUBundles/NVMTLDriver.bundle/Contents/MacOS/NVMTLDriver
-   sudo codesign --force --sign - /Library/GPUBundles/NVMTLDriver.bundle   # CHỈ khi dòng đầu cho thấy Signature=adhoc; nếu không, dừng
-   ```
-   rồi khởi động lại máy. A0 = chép lại bản sao lưu (mục 7).
-2. `bash tools/nm_readonly_diagnostics.sh status` (một lần).
-3. Với mỗi kịch bản `nen-dung-yen`, `keo-cua-so`, `cuon`, lặp 3 lần:
+1. `bash tools/nm_readonly_diagnostics.sh status` (một lần).
+2. Với mỗi kịch bản `nen-dung-yen`, `keo-cua-so`, `cuon`, lặp 3 lần:
    ```bash
    ps -o cputime= -p "$(pgrep -x WindowServer)"     # trước
    bash tools/nm_readonly_diagnostics.sh measure <kịch-bản>-<biến-thể>-<lần>
@@ -102,27 +110,177 @@ mở; Spotlight không đang index; khởi động lại máy trước mỗi bi�
    ```
    Thao tác liên tục từ tiếng bíp `>>> BẮT ĐẦU` tới `<<< DỪNG` (kéo một cửa sổ Finder/Safari; cuộn một trang dài trong Safari).
 
-**Số liệu so sánh (trung vị của 3 lần):** flip/s (`nvaccel_iop_flips` + `nvaccel_iop_async_flips`), `nvaccel_iop_late`,
-`nvaccel_iop_async_drop`, `nvrmfb_flip_latch_late`/`_timeouts`, thời gian trung bình mỗi pure flip, `nvrmfb_vram_grants`,
-`nvaccel_surface_gpu_waits`, CPU WindowServer, dòng log `present stats`. Một biến thể chỉ được coi là tốt hơn khi trung vị cải
-thiện vượt độ dao động giữa 3 lần và không làm xấu chỉ số khác; chênh lệch nhỏ hơn độ dao động = **không kết luận**.
+**Số liệu so sánh (trung vị của 3 lần):**
+- **flip/s = delta `nvaccel_iop_flips` / T.** Bộ đếm này đã gồm cả flip bất đồng bộ: nhánh async thành công tăng
+  `nvaccel_iop_flips` và `nvaccel_iop_async_flips` trong cùng một câu lệnh (`kexts/NVRM/accel/nvrm-accel.cpp:1955`), nhánh đồng
+  bộ chỉ tăng `nvaccel_iop_flips` (2085). `nvaccel_iop_async_flips` là **tập con**: chỉ dùng để biết tỉ lệ flip đi đường async,
+  **không cộng** vào flip/s (cộng sẽ đếm mỗi flip async hai lần). `tools/test_flip_counter_docs.py` chặn công thức cộng tái xuất
+  hiện trong tài liệu/script và báo khi quan hệ tập con trong mã nguồn thay đổi.
+- `nvaccel_iop_late`, `nvaccel_iop_async_drop`, `nvrmfb_flip_latch_late`/`_timeouts`, thời gian trung bình mỗi pure flip,
+  `nvrmfb_vram_grants`, `nvaccel_surface_gpu_waits`, CPU WindowServer, dòng log `present stats`.
+
+Một biến thể chỉ được coi là tốt hơn khi trung vị cải thiện vượt độ dao động giữa 3 lần và không làm xấu chỉ số khác; chênh
+lệch nhỏ hơn độ dao động = **không kết luận**.
 
 Thí nghiệm cấu hình tùy chọn (cần duyệt; đảo ngược được): `NVMTL_ASYNC_TEX_UPLOAD=1` trong `nvrm610.conf` (upstream, chỉ
 `replaceRegion`), `debug.nvrmfb_flip_latch=2` (sysctl, mất khi khởi động lại). Chạy riêng, cùng quy trình.
 
-## 7. Rollback
+## 7. Cài thử và rollback (chưa thực hiện; người dùng tự chạy, cần sudo và duyệt riêng)
 
-**Bản cài thử về gốc** (cần sudo; rồi khởi động lại máy):
+Nguyên tắc: (1) sao lưu bản gốc **một lần**, vào thư mục mới, và **xác minh đầy đủ** trước mọi thay đổi; (2) không bao giờ ghi
+đè hay xóa bản sao lưu gốc; (3) không xóa bản đang cài: nó chỉ được **đổi tên sang chỗ khác** sau khi bản thay thế đã được
+dựng và kiểm tra đầy đủ; (4) mọi bản trung gian nằm trong `/Library/NullMoth/nm-stage/<thời điểm>/`, cùng volume với
+`/Library/GPUBundles` (đổi tên là tức thời); (5) bất kỳ bước kiểm nào không in đúng dòng mong đợi: **dừng**.
+
+**7.0 Định nghĩa dùng chung** (dán vào Terminal trước mỗi bước). Bảng kê ghi mọi mục của bundle: đường dẫn tương đối, quyền,
+uid:gid dạng số (để so được cả trong Recovery), đích liên kết, rồi sha256 của mọi file.
 ```bash
-sudo rm -rf /Library/GPUBundles/NVMTLDriver.bundle
-sudo ditto ~/nm-backup/NVMTLDriver.bundle.orig /Library/GPUBundles/NVMTLDriver.bundle
+SRC=/Library/GPUBundles/NVMTLDriver.bundle
+nm_manifest() { ( cd "$1" || exit 1
+    sudo find . -exec stat -f '%N|%Sp|%u:%g|%Y' {} + | LC_ALL=C sort
+    sudo find . -type f -exec shasum -a 256 {} + | LC_ALL=C sort -k2 ); }
+# khác biệt giữa hai bảng kê, bỏ qua binary plugin và chữ ký (thứ duy nhất một lần cài thử được phép đổi)
+nm_other_diffs() { diff <(nm_manifest "$1") <(nm_manifest "$2") | grep '^[<>]' | grep -v -e '/Contents/MacOS/NVMTLDriver' -e '/Contents/_CodeSignature'; }
 ```
-Nếu màn hình không lên sau khi cài thử: vào macOS Recovery → Terminal, chép bản sao lưu về
-`/Volumes/<ổ hệ thống>/Library/GPUBundles/NVMTLDriver.bundle` (cùng lệnh, đổi đường dẫn), khởi động lại. Chỉ binary plugin
-(userland) bị thay; kext, EFI, NVK, translator không đổi.
 
-**Mã nguồn:** revert từng commit trên branch tích hợp (không sửa lịch sử):
+**7.1 Sao lưu bản gốc A0 — một lần, trước mọi thay đổi.** Cả khối chạy trong một subshell `set -e`: một kiểm tra hỏng là dừng,
+các lệnh sau không chạy. (Mỗi kiểm tra nằm trên một dòng riêng: trong `a && b`, `set -e` không dừng khi `a` hỏng.)
+```bash
+( set -e
+  [ ! -e ~/nm-backup/A0-PATH ] || { echo "Đã có backup gốc: $(cat ~/nm-backup/A0-PATH) — không làm lại bước này"; exit 1; }
+  B=~/nm-backup/A0-$(date +%Y%m%d-%H%M%S)
+  mkdir -p ~/nm-backup; mkdir "$B"                       # mkdir không -p: thư mục phải mới, không dùng lại cái cũ
+  nm_manifest "$SRC" > "$B/manifest.txt"
+  sudo ditto "$SRC" "$B/NVMTLDriver.bundle"
+  nm_manifest "$B/NVMTLDriver.bundle" | diff "$B/manifest.txt" -          # khác biệt nào cũng dừng
+  r1=$(codesign --verify --strict "$SRC" >/dev/null 2>&1; echo $?)
+  r2=$(codesign --verify --strict "$B/NVMTLDriver.bundle" >/dev/null 2>&1; echo $?)
+  [ "$r1" = "$r2" ]                                                       # chữ ký của backup như bản cài
+  { codesign -dv "$SRC" 2>&1 || true; } | grep -E '^(Signature|TeamIdentifier)|not signed' > "$B/signature.txt" || true
+  shasum -a 256 "$B/manifest.txt" > "$B/manifest.txt.sha256"
+  echo "$B" > ~/nm-backup/A0-PATH
+  sudo chflags -R uchg "$B" ~/nm-backup/A0-PATH          # khóa: cp/ditto/mv/rm thông thường không ghi đè hay xóa được
+  echo "BACKUP ĐẦY ĐỦ: $B"; cat "$B/signature.txt" )
+```
+Chỉ đi tiếp khi thấy `BACKUP ĐẦY ĐỦ`. Ghi lại đường dẫn này ra giấy: cần cho Recovery.
+
+**7.2 Cài thử một biến thể** (`V` = thư mục output của biến thể ở mục 5). Dựng bản thay thế từ bản đang cài, chỉ thay binary:
+```bash
+V=~/nm-B-custom-O1; ST=/Library/NullMoth/nm-stage/$(date +%Y%m%d-%H%M%S)
+( set -e
+  B=$(cat ~/nm-backup/A0-PATH); [ -d "$B/NVMTLDriver.bundle" ]           # chưa có backup gốc: dừng
+  [ -d /Library/NullMoth ]
+  [ -f "$V/NVMTLDriver" ]
+  case "$(cat "$B/signature.txt")" in
+    *adhoc*) MODE=adhoc ;; *"not signed"*) MODE=unsigned ;;
+    *) echo "STOP: bundle gốc ký bằng danh tính khác ad hoc; thay binary sẽ làm hỏng chữ ký"; exit 1 ;; esac
+  sudo mkdir -p "$ST"; [ ! -e "$ST/new.bundle" ]
+  sudo ditto "$SRC" "$ST/new.bundle"
+  sudo cp "$V/NVMTLDriver" "$ST/new.bundle/Contents/MacOS/NVMTLDriver"
+  if [ "$MODE" = adhoc ]; then sudo codesign --force --sign - "$ST/new.bundle"; codesign --verify --strict "$ST/new.bundle"; fi
+  [ -z "$(nm_other_diffs "$SRC" "$ST/new.bundle")" ]                      # chỉ khác binary và chữ ký
+  echo "BẢN MỚI ĐÃ KIỂM ($MODE): $ST/new.bundle" )
+```
+Chỉ khi thấy `BẢN MỚI ĐÃ KIỂM`: đóng bớt ứng dụng rồi đổi chỗ, **trong cùng cửa sổ Terminal** (khối này dùng `ST` và `SRC` của
+các khối trên và dừng nếu chúng rỗng hoặc bản mới không có). Bản đang cài được **đổi tên** thành `$ST/prev.bundle`, không bị
+xóa; nếu bước thứ hai hỏng thì nó được trả về chỗ cũ:
+```bash
+( set -e
+  : "${SRC:?SRC rỗng: dán khối 7.0}" "${ST:?ST rỗng: chạy khối dựng ở trên trong cùng cửa sổ Terminal}"
+  [ -d "$ST/new.bundle" ]
+  [ ! -e "$ST/prev.bundle" ]
+  [ -d "$SRC" ]
+  sudo mv "$SRC" "$ST/prev.bundle"
+  sudo mv "$ST/new.bundle" "$SRC" || { sudo mv "$ST/prev.bundle" "$SRC"; echo "STOP: đã trả lại bản cũ"; exit 1; }
+  [ -z "$(nm_other_diffs "$ST/prev.bundle" "$SRC")" ]
+  echo "ĐÃ CÀI THỬ (bản cũ giữ ở $ST/prev.bundle)" )
+```
+Rồi khởi động lại máy. `$ST/prev.bundle` và backup gốc giữ nguyên.
+
+**7.3 Khôi phục bản gốc A0** (khi máy còn đăng nhập được). Dựng và kiểm bản khôi phục **trước**, bản đang cài vẫn ở nguyên chỗ:
+```bash
+ST=/Library/NullMoth/nm-stage/$(date +%Y%m%d-%H%M%S)
+( set -e
+  B=$(cat ~/nm-backup/A0-PATH)
+  shasum -a 256 -c "$B/manifest.txt.sha256"                              # bảng kê gốc chưa bị sửa
+  nm_manifest "$B/NVMTLDriver.bundle" | diff "$B/manifest.txt" -          # backup còn nguyên
+  sudo mkdir -p "$ST"; [ ! -e "$ST/restore.bundle" ]
+  sudo ditto "$B/NVMTLDriver.bundle" "$ST/restore.bundle"               # chỉ đọc từ backup
+  sudo chflags -R nouchg "$ST/restore.bundle"                           # bản chép không mang cờ khóa của backup
+  nm_manifest "$ST/restore.bundle" | diff "$B/manifest.txt" -            # bản khôi phục giống hệt bản gốc
+  echo "BẢN KHÔI PHỤC ĐÃ KIỂM: $ST/restore.bundle" )
+```
+Chỉ khi thấy `BẢN KHÔI PHỤC ĐÃ KIỂM`: đổi chỗ **trong cùng cửa sổ Terminal** (bản đang cài được đổi tên thành
+`$ST/replaced.bundle`, không bị xóa), rồi kiểm lại:
+```bash
+( set -e
+  : "${SRC:?SRC rỗng: dán khối 7.0}" "${ST:?ST rỗng: chạy khối dựng ở trên trong cùng cửa sổ Terminal}"
+  [ -d "$ST/restore.bundle" ]
+  [ ! -e "$ST/replaced.bundle" ]
+  [ -d "$SRC" ]
+  sudo mv "$SRC" "$ST/replaced.bundle"
+  sudo mv "$ST/restore.bundle" "$SRC" || { sudo mv "$ST/replaced.bundle" "$SRC"; echo "STOP: đã trả lại bản trước đó"; exit 1; }
+  nm_manifest "$SRC" | diff "$(cat ~/nm-backup/A0-PATH)/manifest.txt" -
+  echo "ĐÃ KHÔI PHỤC ĐÚNG BẢN GỐC (bản trước đó giữ ở $ST/replaced.bundle)" )
+```
+Rồi khởi động lại. Thư mục `/Library/NullMoth/nm-stage/` chỉ xóa (thủ công) khi máy đã chạy ổn với bản gốc; **không bao giờ**
+xóa hay sửa `~/nm-backup/A0-*`.
+
+**7.4 Khôi phục từ macOS Recovery** (khi không vào được desktop; các lệnh chưa được thử trên Recovery của macOS Tahoe)
+1. Khởi động vào Recovery (mục Recovery của macOS trong boot picker), mở Utilities → Terminal (đã là root, không cần `sudo`).
+2. Xác định đúng volume, **không giả định tên**:
+   ```bash
+   diskutil apfs list          # các volume, vai trò (System/Data), trạng thái FileVault (khóa hay không)
+   ls /Volumes
+   ```
+   `/Library` và thư mục người dùng nằm trên volume **Data** của bản macOS đang dùng. Nếu volume đó đang khóa (FileVault): Disk
+   Utility → chọn volume Data → Mount và nhập mật khẩu (hoặc `diskutil apfs unlockVolume <định danh>`).
+3. Tìm bản đang cài và backup trên mọi volume đã mount:
+   ```bash
+   ls -d /Volumes/*/Library/GPUBundles/NVMTLDriver.bundle
+   ls -d /Volumes/*/Users/*/nm-backup/A0-*
+   cat /Volumes/*/Users/*/nm-backup/A0-PATH     # đường dẫn ghi lúc sao lưu, dạng /Users/<tên>/nm-backup/A0-<thời điểm>
+   ```
+   Chọn volume `V` sao cho: bundle đang cài và backup **cùng nằm trên `V`**; thư mục backup trùng với đường dẫn trong `A0-PATH`
+   (thêm tiền tố `/Volumes/<tên V>`); `diskutil info "/Volumes/<tên V>"` khớp volume Data của ổ hệ thống (tên, dung lượng). Nếu có
+   nhiều hơn một ứng viên hoặc không chắc chắn: **dừng**, không sửa gì.
+4. Kiểm tra công cụ: `command -v ditto diff shasum find stat cmp`. Kiểm backup và dựng bản khôi phục:
+   ```bash
+   V="/Volumes/<tên V>"; B="$V/Users/<tên>/nm-backup/A0-<thời điểm>"; SRC="$V/Library/GPUBundles/NVMTLDriver.bundle"
+   ST="$V/Library/NullMoth/nm-stage/recovery-$(date +%Y%m%d-%H%M%S)"; mkdir -p "$ST"
+   ditto "$B/NVMTLDriver.bundle" "$ST/restore.bundle" && chflags -R nouchg "$ST/restore.bundle"
+   ```
+   Nếu có `shasum`, so bảng kê (bản không dùng `sudo`; uid:gid dạng số nên so được trong Recovery):
+   ```bash
+   nm_manifest() { ( cd "$1" || exit 1; find . -exec stat -f '%N|%Sp|%u:%g|%Y' {} + | LC_ALL=C sort
+                     find . -type f -exec shasum -a 256 {} + | LC_ALL=C sort -k2 ); }
+   nm_manifest "$ST/restore.bundle" | diff "$B/manifest.txt" - && echo "BẢN KHÔI PHỤC ĐÃ KIỂM"
+   ``` Nếu thiếu `shasum`: ít nhất `cmp "$B/NVMTLDriver.bundle/Contents/MacOS/NVMTLDriver" "$ST/restore.bundle/Contents/MacOS/NVMTLDriver"`
+   và `diff <(cd "$B/NVMTLDriver.bundle" && find . | sort) <(cd "$ST/restore.bundle" && find . | sort)` đều không in gì.
+5. Chỉ khi bước 4 đạt (thấy `BẢN KHÔI PHỤC ĐÃ KIỂM`, hoặc `cmp`/`diff` không in gì): đổi chỗ, bản đang cài được đổi tên chứ không bị xóa:
+   ```bash
+   ( set -e; : "${SRC:?}" "${ST:?}"; [ -d "$ST/restore.bundle" ]; [ ! -e "$ST/replaced.bundle" ]
+     mv "$SRC" "$ST/replaced.bundle"; mv "$ST/restore.bundle" "$SRC" || { mv "$ST/replaced.bundle" "$SRC"; exit 1; }
+     echo "ĐÃ ĐỔI CHỖ" )
+   ```
+   Khởi động lại. Chỉ binary plugin (userland) từng bị thay; kext, EFI, NVK, translator không đổi.
+
+**7.5 Mã nguồn:** revert từng commit trên branch tích hợp (không sửa lịch sử):
 - Độc lập (revert riêng được): `63afab4`, `218533a`, `d895e59`, `c8112a8`, `2004c9c`, `ba973b2`, `28525ad`, `b565d6c`, `0fe017d`.
 - Theo nhóm, đúng thứ tự: `git revert d895e59 024bfdc` (vertex trước index); `git revert b565d6c 226f0a1`;
   `git revert c8112a8 28525ad ba26f85`; `git revert 0fe017d 7f6ece4 af71166`.
 - Đưa `plugin/` về đúng `75e2e28`: `git revert 63afab4 218533a d895e59 024bfdc b565d6c 226f0a1` (đã kiểm: `git diff 75e2e28 -- plugin/` rỗng).
+- Các commit sau `9cc2138` chỉ sửa test và tài liệu.
+
+## 8. Giới hạn
+
+- **Test mô hình không chứng minh hành vi của NVK thật.** `tools/test_bind_cache.py` chỉ chứng minh: theo mô hình trạng thái binding
+  của Vulkan (spec), mỗi draw vẫn thấy đúng binding đã yêu cầu. Nó không kiểm NVK/Mesa thật; đặc biệt giả định rằng thao tác nội bộ
+  của NVK (meta) khôi phục binding — giả định mà cache pipeline của upstream cũng dựa vào — chưa được kiểm vì không có nguồn Mesa
+  trong cloud. Chỉ chạy thật trên máy (và Vulkan validation nếu có) mới xác nhận được.
+- **`tools/check_plugin_c_delta.py` không thay thế build toàn plugin.** Nó chỉ so chẩn đoán clang của riêng `nvmtl_vk.c` (với header
+  macOS rỗng) giữa hai phiên bản; không biên dịch phần Objective-C, không link, không kiểm khai báo thật của macOS. Build thật là
+  `tools/nm_build_plugin.sh` trên macOS — chưa chạy.
+- Các test tách hàm (`test_vram_tag_key`, `test_release_debug_polls`, `test_subwho_census`) biên dịch một bản trích của hàm với
+  stub, không phải plugin; CoreFoundation trong `test_vram_tag_key` là bản giả.
+- Lợi ích của mọi tối ưu chưa được đo; không có số FPS hay frame time nào.
