@@ -5451,6 +5451,7 @@ void nvmtl_vk_cmd_bind_pipeline(nvk_cmdbuf *c, nvk_pipeline *p) {
     if (p->pipe && c->graphics_pipeline == p->pipe) return;
     pvkCmdBindPipeline(c->cb, VK_PIPELINE_BIND_POINT_GRAPHICS, (VkPipeline)p->pipe);
     c->graphics_pipeline = p->pipe;
+    nvmtl_bc_pipeline_changed(&c->bind);   // its vertex strides may replace the ones the record holds
 }
 int nvmtl_vk_cmd_set_topology(nvk_cmdbuf *c, unsigned mtlType) {
     static const VkPrimitiveTopology map[5] = { VK_PRIMITIVE_TOPOLOGY_POINT_LIST, VK_PRIMITIVE_TOPOLOGY_LINE_LIST,
@@ -5474,7 +5475,10 @@ int nvmtl_vk_cmd_vertex_inputs(nvk_cmdbuf *c, const nvk_pipeline *p, const uint3
         if (!sl || sl->kind != NVMTL_SLOT_BUF || !sl->h) { static int said; if (said++ < 8) nvlog("G16 draw: the pipeline fetches vertex "
             "attributes from buffer index %u and nothing is bound there — NOT drawn", i); return -1; }
         VkBuffer b = (VkBuffer)sl->h; VkDeviceSize off = sl->off;
-        if (!p->vin_dyn) { pvkCmdBindVertexBuffers(c->cb, i, 1, &b, &off); continue; }
+        if (!p->vin_dyn) {
+            if (!nvmtl_bc_vertex_same(&c->bind, i, sl->h, off, 0, 0)) pvkCmdBindVertexBuffers(c->cb, i, 1, &b, &off);
+            continue;
+        }
         VkDeviceSize st = p->vin_stride[i];
         if (p->vin_dyn & (1u << i)) {
             if (!vstride || !(vset & (1u << i))) { static int said; if (said++ < 8) nvlog("apps-dyn draw: buffer index %u has a dynamic stride "
@@ -5483,7 +5487,7 @@ int nvmtl_vk_cmd_vertex_inputs(nvk_cmdbuf *c, const nvk_pipeline *p, const uint3
             if (st > g_lim.maxVertexInputBindingStride) { static int said; if (said++ < 8) nvlog("apps-dyn draw: attributeStride %llu at "
                 "buffer index %u is past maxVertexInputBindingStride %u — NOT drawn", (unsigned long long)st, i, g_lim.maxVertexInputBindingStride); return -1; }
         }
-        pvkCmdBindVertexBuffers2(c->cb, i, 1, &b, &off, NULL, &st);
+        if (!nvmtl_bc_vertex_same(&c->bind, i, sl->h, off, 1, st)) pvkCmdBindVertexBuffers2(c->cb, i, 1, &b, &off, NULL, &st);
     }
     return 0;
 }

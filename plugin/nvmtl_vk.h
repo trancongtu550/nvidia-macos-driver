@@ -86,7 +86,7 @@ typedef struct { void *cb; void *fb; void *pool; void *dset[2]; void *depth_view
                  /* Vulkan graphics bindings persist until changed; compute has its own bind point. */
                  void *graphics_pipeline, *graphics_layout, *graphics_sets[3];
                  uint32_t graphics_set_count, graphics_offset_count, graphics_offsets[2];
-                 nvmtl_bind_cache bind;   /* index (and vertex) buffer bindings in effect (nvmtl_bind_cache.h) */
+                 nvmtl_bind_cache bind;   /* index and vertex buffer bindings in effect (nvmtl_bind_cache.h) */
                } nvk_cmdbuf;
 int  nvmtl_vk_init(void);
 int nvmtl_vk_sample_positions_backend(void);
