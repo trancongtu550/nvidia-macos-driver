@@ -884,7 +884,24 @@ static BOOL nvmtl_desc_fbo(MTLTextureDescriptor *d) {
 typedef struct { uint32_t magic, seed, gen; } nvmtl_vram_tag;
 #define NVMTL_VRAM_MAGIC 0x564d5634u
 static unsigned long long g_surf_vram, g_surf_private, g_surfin_skip, g_surfin_copy;
-static CFStringRef nvmtl_vram_tag_key(NSUInteger plane) { return CFStringCreateWithFormat(NULL, NULL, CFSTR("NVMTLVramAt:p%lu"), (unsigned long)plane); }
+// The IOSurface value key of a plane's tag: a constant string per plane, which every tag read (each bind of an IOSurface
+// texture reads one) formatted and allocated again. Planes 0-3 keep one key each for the life of the process, published
+// once with a compare-and-swap; the CFRetain here balances the caller's CFRelease, as the created string did. Other planes,
+// and a key that could not be made, behave as before.
+#define NVMTL_VRAM_TAG_KEYS 4
+static CFStringRef nvmtl_vram_tag_key(NSUInteger plane)
+{
+    static CFStringRef keys[NVMTL_VRAM_TAG_KEYS];
+    if (plane >= NVMTL_VRAM_TAG_KEYS) return CFStringCreateWithFormat(NULL, NULL, CFSTR("NVMTLVramAt:p%lu"), (unsigned long)plane);
+    CFStringRef k = __atomic_load_n(&keys[plane], __ATOMIC_ACQUIRE);
+    if (!k) {
+        CFStringRef made = CFStringCreateWithFormat(NULL, NULL, CFSTR("NVMTLVramAt:p%lu"), (unsigned long)plane), seen = NULL;
+        if (!made) return NULL;
+        if (__atomic_compare_exchange_n(&keys[plane], &seen, made, 0, __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) k = made;
+        else { CFRelease(made); k = seen; }
+    }
+    return (CFStringRef)CFRetain(k);
+}
 static int nvmtl_vram_tag_current(IOSurfaceRef surf, NSUInteger plane, uint32_t seed)
 {
     CFStringRef k = nvmtl_vram_tag_key(plane); CFTypeRef v = IOSurfaceCopyValue(surf, k); CFRelease(k);
