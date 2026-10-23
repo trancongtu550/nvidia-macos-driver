@@ -5503,11 +5503,18 @@ static int nvmtl_index_range_ok(const nvk_buffer *idx, size_t offset)
                                         (unsigned long long)(idx ? idx->size : 0));
     return 0;
 }
+// The only vkCmdBindIndexBuffer of the plugin: a bind of the binding already in effect is left out (nvmtl_bind_cache.h).
+static void nvmtl_bind_index(nvk_cmdbuf *c, const nvk_buffer *idx, size_t offset, int is32)
+{
+    const VkIndexType type = is32 ? VK_INDEX_TYPE_UINT32 : VK_INDEX_TYPE_UINT16;
+    if (nvmtl_bc_index_same(&c->bind, idx->buf, offset, (uint32_t)type)) return;
+    pvkCmdBindIndexBuffer(c->cb, (VkBuffer)idx->buf, offset, type);
+}
 void nvmtl_vk_cmd_draw_indexed(nvk_cmdbuf *c, nvk_buffer *idx, size_t offset, uint32_t count, int is32,
                                uint32_t instances, int32_t baseVertex, uint32_t baseInstance)
 {
     if (!nvmtl_index_range_ok(idx, offset)) return;
-    pvkCmdBindIndexBuffer(c->cb, (VkBuffer)idx->buf, offset, is32 ? VK_INDEX_TYPE_UINT32 : VK_INDEX_TYPE_UINT16);
+    nvmtl_bind_index(c, idx, offset, is32);
     if (c->nobind) return;
     const uint32_t n = instances ? instances : 1;
     if (nvmtl_fetch_split(c, count, n)) {
@@ -6586,7 +6593,7 @@ int nvmtl_vk_cmd_draw_patches(nvk_cmdbuf *c, const nvk_pipeline *p, uint64_t fac
 void nvmtl_vk_cmd_draw_indexed_indirect(nvk_cmdbuf *c, nvk_buffer *idx, size_t idxOff, int is32, nvk_buffer *b, size_t off)
 {
     if (!nvmtl_index_range_ok(idx, idxOff)) return;
-    pvkCmdBindIndexBuffer(c->cb, (VkBuffer)idx->buf, idxOff, is32 ? VK_INDEX_TYPE_UINT32 : VK_INDEX_TYPE_UINT16);
+    nvmtl_bind_index(c, idx, idxOff, is32);
     if (c->nobind) return;
     NVMTL_SEMU_DRAW(c, pvkCmdDrawIndexedIndirect(c->cb, (VkBuffer)b->buf, off, 1, 0));
 }

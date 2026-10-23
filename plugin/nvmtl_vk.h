@@ -43,6 +43,7 @@ typedef struct { void *rp; void *pipe; void *layout; int has_depth; uint32_t dfm
 void nvmtl_vk_pipeline_destroy(nvk_pipeline *p);
 typedef struct { void *pool; nvk_buffer stage; } nvk_queue;
 #include "nvmtl_sampler_desc.h"
+#include "nvmtl_bind_cache.h"
 typedef struct { void *s; int linear, repeat; float lod_min, lod_max; nvmtl_sampler_desc desc; int full_state; } nvk_sampler;
 typedef struct { void *pool, *set; } nvk_setref;
 typedef struct {
@@ -85,6 +86,7 @@ typedef struct { void *cb; void *fb; void *pool; void *dset[2]; void *depth_view
                  /* Vulkan graphics bindings persist until changed; compute has its own bind point. */
                  void *graphics_pipeline, *graphics_layout, *graphics_sets[3];
                  uint32_t graphics_set_count, graphics_offset_count, graphics_offsets[2];
+                 nvmtl_bind_cache bind;   /* index (and vertex) buffer bindings in effect (nvmtl_bind_cache.h) */
                } nvk_cmdbuf;
 int  nvmtl_vk_init(void);
 int nvmtl_vk_sample_positions_backend(void);
