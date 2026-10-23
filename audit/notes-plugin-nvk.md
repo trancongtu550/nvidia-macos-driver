@@ -84,3 +84,16 @@ Base `75e2e28`. Ghi chú làm việc; bản tổng hợp nằm ở `findings.md`
   VRAM dùng trang lớn 64 KB và `ALLOW_NONCONTIGUOUS` (tắt bằng `NVK_NO_BIGPAGE`/`NVK_NO_NONCONTIG`). Bộ nhớ LOCAL có
   map CPU mặc định chuyển sang RAM hệ thống trừ khi `NVK_LOCAL_MAP_SYSMEM=0` và BAR1 phủ hết VRAM (F17). Bảng
   `dev->mappings` không khóa trong patch (F16, chưa kết luận).
+
+## Lượt 3
+
+- Đường mỗi draw (render): `nvmtlBindSamplerPipeline` (`NVMTLObjects.m:2776-2790`) -> thêm pipeline vào tập tài nguyên
+  (MRU), `nvmtl_vk_cmd_bind_pipeline` (bỏ trùng), `nvmtl_bind_embedded` × 2, `nvmtl_vk_cmd_bind_set` (snapshot/reuse set, bỏ
+  bind trùng) -> `nvmtl_vk_cmd_set_topology` (luôn gọi 2 lệnh dynamic state) -> `nvmtlVertexInputs` (bind vertex buffer
+  từng thuộc tính) -> `vkCmdDraw`/`vkCmdDrawIndexed` (index buffer bind mỗi lần).
+- Compute: barrier giữa các dispatch qua `nvmtlE78Barrier` (`NVMTLObjects.m:4503-4523`), mặc định thu hẹp/gộp.
+- Plugin nạp NVK trực tiếp từ `/Library/GPUBundles/nvmtl/libvulkan_nouveau.dylib` (`nvmtl_vk.c:109-117, 705`), rơi về
+  loader nếu không có `vkGetInstanceProcAddr`; tra 10 entry point riêng; translator nạp từ cạnh plugin hoặc
+  `/Library/GPUBundles/nvmtl/libnvmtl_translate.dylib` (`NVMTLLibraryLoad.m:104-140`), chỉ `nvmtl_translate` bắt buộc.
+- NVK build `debugoptimized` (assert bật, F18); plugin `-O1` (F19). Patch NVK sửa `nvk_cmd_buffer.c` cho chuỗi dispatch
+  compute (GDQ), không đụng đường draw ngoài hai assert bị hạ thành cảnh báo.

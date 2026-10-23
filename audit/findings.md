@@ -221,6 +221,27 @@ Phân loại:
   Test `tools/test_subwho_census.py`: tổng chính xác, 1 dòng/4096 submit, biên 24, tái nhập từ log; chạy thường, TSAN,
   ASAN; 3 đối chứng âm (bỏ khóa, log trong khóa, biên lỏng) đều phải hỏng và đã hỏng.
 - Không phải cải thiện hiệu năng; chưa build trên macOS.
+- Lượt 3 (commit `ccdf592`, cùng branch):
+  - Test cũ dùng `pthread_barrier_t` — macOS **không có** — nên trên Mac nhánh thường sẽ hỏng và các nhánh sanitizer bị
+    báo nhầm là "thiếu runtime". Nay dùng cổng khởi động bằng atomic. Nhánh sanitizer chỉ SKIP khi một chương trình rỗng
+    dựng với sanitizer đó không chạy được; nếu chương trình rỗng chạy mà fixture không biên dịch thì test FAIL. Đã kiểm:
+    gcc 13 (đủ TSAN/ASAN) PASS; chỉ có clang 18 không runtime sanitizer -> 3 SKIP có lý do, nhánh thường PASS; trình biên
+    dịch giả lập lỗi biên dịch fixture khi có sanitizer -> 3 FAIL. **Chưa chạy trên macOS.**
+  - Đo overhead (`tools/bench_subwho_census.py`, CPU, cô lập — **không phải benchmark GPU/FPS**), VM Linux x86_64 4 vCPU,
+    gcc 13 `-O1`, 4.000.000 lần gọi, trung vị 7 lần chạy (ns/lần gọi):
+
+    | Luồng | Số `who` | Không khóa (75e2e28) | Có khóa | Lượt đếm bị mất (không khóa, lớn nhất) |
+    |---:|---:|---:|---:|---:|
+    | 1 | 19 | 23,4 | 33,4 | 0 |
+    | 1 | 1 | 6,0 | 23,3 | 0 |
+    | 2 | 19 | 57,7 | 187,6 | 136.745 |
+    | 2 | 1 | 9,2 | 84,1 | 1.701.554 |
+    | 4 | 19 | 87,8 | 128,2 | 250.549 |
+    | 4 | 1 | 12,3 | 70,2 | 2.591.363 |
+
+    Đơn luồng: thêm ~10-17 ns mỗi submit. Nhiều luồng chỉ gọi hàm này (tranh chấp tối đa, không thực tế): tới ~190 ns;
+    bản không khóa nhanh hơn nhưng mất số đếm. Hàm chạy một lần mỗi submit; chi phí một submit thật (fence mới, ioctl)
+    **chưa đo** nên tỉ lệ so với submit chỉ là giả định. Số đo trên macOS (pthread mutex của Darwin) có thể khác.
 
 ### F13. Bản release không có kênh số đo hiệu năng — chặn chẩn đoán F3/F8/F9
 
@@ -281,6 +302,55 @@ Phân loại:
 - [GT] Buffer HOST_VISIBLE|DEVICE_LOCAL mà GPU đọc nhiều lần sẽ đi qua PCIe. Ảnh hưởng tới kéo/cuộn chưa biết; có thể
   thử A/B bằng `NVK_LOCAL_MAP_SYSMEM=0` trong `nvrm610.conf` (tiền tố `NVK_` được nạp). **Cần đo trên máy thật**; khóa
   này không nằm trong allowlist T2 hiện tại.
+
+## Lượt 3 — encoder và command buffer NVK
+
+Đã đọc: render encoder (`NVMTLObjects.m` 3038-3590), compute encoder (4067-4660), chỉ mục blit encoder (4669-4897), các
+helper mỗi draw (`nvmtlBindSamplerPipeline` 2776-2790, `nvmtl_retain_resource` 2605-2609, `NVMTLResSet` 160-196),
+`nvmtl_vk.c` 2990-3100 (snapshot descriptor, bind buffer/sampler), 3261-3300 (bind set), 4926-4986, 5416-5600 (draw, index,
+dynamic state), 6590-6615 (barrier); patch NVK: `nvk_cmd_buffer.c/.h`, đầu `nvk_cmd_dispatch.c` (3470-3700),
+`nvk_cmd_draw.c` (3958-3975, 12242-12270), `nv_push.h` (12271-12298).
+
+**Upstream đã tối ưu (không làm lại):**
+
+| Hạng mục | Vị trí |
+|---|---|
+| Bỏ bind pipeline trùng | `nvmtl_vk.c:5450-5454` |
+| Dùng lại descriptor set / chỉ ghi phần đổi (dirty-only) / chỉ đổi dynamic offset khi chỉ buffer đổi | `nvmtl_vk.c:2990-3040` |
+| Bỏ `vkCmdBindDescriptorSets` trùng | `nvmtl_vk.c:3261-3272` |
+| Tập tài nguyên có khóa + cache MRU 8 mục (GL của Apple bind lại buffer mỗi draw) | `NVMTLObjects.m:160-196` |
+| `setBytes` qua ring buffer | `NVMTLObjects.m:3048-3065`, `4155-4175` |
+| Barrier giữa các dispatch compute thu hẹp (compute->compute) và gộp (E78/G79), **bật mặc định**; tắt bằng `NVMTL_ENC78_OFF`/`NVMTL_G79_OFF` | `NVMTLObjects.m:4067-4152, 4503-4523` |
+| NVK: nối chuỗi dispatch compute qua barrier (GDQ) | patch 3470-3700 |
+
+**Chi phí lặp lại còn lại (dữ kiện; tác động chưa đo, không đủ bằng chứng để sửa):**
+
+| Mỗi lần | Việc | Vị trí | Ghi chú |
+|---|---|---|---|
+| draw | `vkCmdSetPrimitiveTopology` + `vkCmdSetPrimitiveRestartEnable` dù không đổi | `nvmtl_vk.c:5455-5466` | Runtime Vulkan của Mesa thường chỉ đánh dấu dirty khi giá trị đổi (không kiểm được: thiếu nguồn Mesa) — chi phí còn lại là lời gọi hàm |
+| draw có index | `vkCmdBindIndexBuffer` không khử trùng | `nvmtl_vk.c:5510` | Cũng ở 6584. Khử trùng đúng theo spec Vulkan (binding tồn tại trong command buffer), nhưng lợi ích chưa đo |
+| draw | `vkCmdBindVertexBuffers(2)` cho từng buffer thuộc tính | `nvmtl_vk.c:5468-5488` | như trên |
+| bind sampler | tạo `NSString` khóa + tra `NSMutableDictionary` | `NVMTLObjects.m:3084-3086, 3095-3097` | Cần Foundation để test: không kiểm được trong cloud |
+| `endEncoding` | cấp phát `NSMutableDictionary` dù không có visibility record | `NVMTLObjects.m:3256` | nhỏ |
+| render pass | `vkCreateFramebuffer` mới | `nvmtl_vk.c:4937` | đã ghi ở lượt 2 |
+
+Kết luận: không tạo patch tối ưu ở lượt này. Các mục trên đều là chi phí CPU cỡ lời gọi hàm, còn các điểm chặn cỡ mili giây
+(F1, F3, F14) cần dữ liệu máy thật.
+
+### F18. [GT] NVK phát hành ở `buildtype=debugoptimized`: assert bật trong driver Vulkan
+
+- [DK] `build/build263.sh:11`: `meson setup ... -Dbuildtype=debugoptimized`, không đặt `b_ndebug`. Chú thích của tác giả
+  trong patch (`nv_push.h`, dòng 12285 của file patch): "a driver that ships with assertions on (debugoptimized)"; hai
+  assert đã bị hạ thành cảnh báo vì làm ứng dụng bị abort (`nvk_cmd_draw.c`, patch 12242-12270; `nv_push.h`, patch 12271-12298).
+- [GT] Mọi `assert` của NVK và runtime Vulkan Mesa chạy trong mọi tiến trình dùng Metal, kể cả WindowServer. Chi phí CPU
+  **chưa đo**. Build với `-Db_ndebug=true` có thể giảm, nhưng đổi hành vi khi một assert lẽ ra kích hoạt (abort -> chạy
+  tiếp với trạng thái sai). Thí nghiệm E3: cần build NVK trên Mac, A/B CPU của WindowServer, duyệt riêng.
+
+### F19. [GT] Plugin phát hành ở `-O1`
+
+- [DK] `build/build_plugin_release.sh:16` và `build_plugin.sh:10`: `-O1`. Không có chú thích giải thích lý do.
+- [GT] `-O2` có thể giảm CPU trên đường encode; chưa đo, và mã có race (F12, F15) có thể đổi hành vi khi tối ưu mạnh hơn.
+  Thí nghiệm E4, cần duyệt riêng. Script `tools/nm_build_plugin.sh` giữ đúng `-O1` của bản release.
 
 ## Không phải vấn đề (đã kiểm)
 

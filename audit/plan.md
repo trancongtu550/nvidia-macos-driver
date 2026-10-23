@@ -1,4 +1,4 @@
-# Kế hoạch triển khai — cập nhật sau audit lượt 2
+# Kế hoạch triển khai — cập nhật sau audit lượt 3
 
 Base: `75e2e28` (v2.5.3 = upstream main). Phát hiện chi tiết: `findings.md`. Phạm vi đã đọc: `README.md` +
 `inventory.tsv` trong thư mục này.
@@ -42,10 +42,13 @@ Base: `75e2e28` (v2.5.3 = upstream main). Phát hiện chi tiết: `findings.md`
 | T3 | NVRMFB | Xóa VRAM ngoài gate; thêm counter: thời gian chờ/giữ gate, thời gian xóa | F1 | **Không** (F11) | Tách hàm, biên dịch bằng clang++ với stub như `tools/test_boot_raster_modes.py`: thứ tự lock, nhánh lỗi giải phóng bộ nhớ, publish chỉ sau khi xóa | Boot trên 4070 Ti, đo grant + flip |
 | T4 | NVAccel | Xuất counter dirty/pageoff đã có + thời gian pageoff; `ALOGV` cho log tạo object | F2, F7 | **Không** (cần cây RM build cho Darwin) | Test Python kiểm khai báo/đăng ký sysctl và log bị giới hạn | Boot thử |
 | T5 | NVRMFB | Counter độ trễ IRQ->giao VBL | F4 | **Không** | Helper tách rời | Boot thử |
-| T6 | plugin | **ĐÃ LÀM** (branch `claude/vigilant-mayer-ptq05r-t6-subwho-race`, `b38e6b3`). Khóa cho `nvmtl_subwho_note`, `nvlog` ngoài khóa | F12 | Có (chưa build trên macOS) | `tools/test_subwho_census.py`: thường + TSAN + ASAN, 3 đối chứng âm | Build plugin để chắc biên dịch được với Xcode |
+| T6 | plugin | **ĐÃ LÀM** (branch `claude/vigilant-mayer-ptq05r-t6-subwho-race`, `b38e6b3` + `ccdf592`). Khóa cho `nvmtl_subwho_note`, `nvlog` ngoài khóa; test chạy được trên macOS về mặt mã nguồn, không che lỗi biên dịch; đo overhead CPU (`tools/bench_subwho_census.py`) | F12 | Có (chưa build trên macOS) | `tools/test_subwho_census.py`: thường + TSAN + ASAN, 3 đối chứng âm | Build plugin bằng `tools/nm_build_plugin.sh` để chắc biên dịch được với Xcode |
+| B1 | script + test | **ĐÃ LÀM** (branch `claude/vigilant-mayer-ptq05r-plugin-build`, `a1588ac`). Build plugin cục bộ tái lập + kiểm artifact + đối chiếu chỉ đọc với bản cài; test hợp đồng ABI plugin↔NVK↔translator | F11 (phần plugin) | Không cần build trong cloud | Harness Xcode giả lập; test ABI có đối chứng âm | Chạy trên Mac (xem `build-plugin-macos.md`) |
 | T8 | plugin | Bộ đếm cấp phát bằng `__atomic_*` | F15 | Có | Harness C đa luồng như T6 | Không bắt buộc |
 | T9 | NVK | Khóa cho `dev->mappings` — **chỉ khi** F16 được xác nhận trên Mesa gốc | F16 | Có (build NVK) | Harness C với stub hash table | Build NVK |
 | T7 | plugin (nghiên cứu) | Đưa surface-in thành bất đồng bộ qua prologue | F3 | Có | Fixture Objective-C kiểu `tools/test_submission_copies.py` (cần macOS) | Bắt buộc; rủi ro cao |
+
+Thí nghiệm **cần build và cài trên máy thật** (giả thuyết, cần duyệt riêng): E3 NVK `-Db_ndebug=true` (F18); E4 plugin `-O2` (F19).
 
 Thí nghiệm **không cần build** (mỗi cái cần người dùng đồng ý riêng, đều đảo ngược được):
 - E1: `sudo sysctl debug.nvrmfb_flip_latch=2` (mất khi reboot) — A/B với script T2. Liên quan F1.

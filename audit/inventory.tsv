@@ -14,10 +14,10 @@ README.md	182	docs	L3-full	đọc toàn bộ
 audit/run_tool_tests.py	71	tooling	L3-full	viết ở lượt 2: chạy và phân loại tools/test_*.py
 build/accel_build.sh	23	build	L3-full	đọc toàn bộ
 build/accel_build_all.sh	18	build	L3-full	đọc toàn bộ
-build/build263.sh	27	build	L3-full	đọc toàn bộ
+build/build263.sh	27	build	L3-full	đọc toàn bộ (NVK debugoptimized, F18)
 build/build_agdc.sh	10	build	L3-full	đọc toàn bộ
-build/build_plugin.sh	36	build	L3-full	đọc toàn bộ
-build/build_plugin_release.sh	25	build	L3-full	đọc toàn bộ
+build/build_plugin.sh	36	build	L3-full	đọc toàn bộ (marker release, cờ dev)
+build/build_plugin_release.sh	25	build	L3-full	đọc toàn bộ (cờ release, minos 15.0, không ký)
 build/build_primary_selector.sh	21	build	L3-full	đọc toàn bộ
 build/build_xlate.sh	23	build	L3-full	đọc toàn bộ
 build/build_xlate_release.sh	30	build	L3-full	đọc toàn bộ
@@ -136,7 +136,7 @@ kexts/NVRMFB/nvrm_surfshare_abi.h	51	source	L1-grep	md5/diff header ABI
 kexts/NVRMFB/nvrm_vram_abi.h	28	source	L1-grep	md5/diff header ABI
 nvk/2.0.5/README.md	14	docs	L3-full	đọc toàn bộ
 nvk/MESA_BASE	1	build-metadata	L3-full	đọc toàn bộ
-nvk/nvk-macos.patch	12298	source-patch-on-vendor	L2-partial	nvkmd_nvrm_sync.c (toàn bộ), nvkmd_nvrm_mem.c (toàn bộ, F16/F17), nvkmd_nvrm_va.c + nvRmSemSurf.c (grep lời gọi RM), nvkmd_nvrm_ctx.c 80-282/420-460/560-602/875-1200, hunk nvkmd.c (6665-6730), nvmtl_cfg.h; NAK/ray tracing/nvk_cmd_buffer.c không đọc
+nvk/nvk-macos.patch	12298	source-patch-on-vendor	L2-partial	nvkmd_nvrm_sync.c (toàn bộ), nvkmd_nvrm_mem.c (toàn bộ), nvkmd_nvrm_va.c + nvRmSemSurf.c (grep lời gọi RM), nvkmd_nvrm_ctx.c 80-282/420-460/560-602/875-1200, nvk_cmd_buffer.c/.h + đầu nvk_cmd_dispatch.c (patch 3470-3700), nvk_cmd_draw.c (3958-3975, 12242-12270), nv_push.h (12271-12298), hunk nvkmd.c (6665-6730), struct nvmtl_nvk_share (6822-6829), mọi export visibility("default"), nvmtl_cfg.h; NAK/ray tracing không đọc
 package/install.sh	523	package	L2-partial	grep đường cài đặt, phiên bản, KC
 package/uninstall.sh	113	package	L0-not-read	Gỡ cài đặt
 plugin/.gitignore	5	build	L3-full	đọc toàn bộ
@@ -147,12 +147,12 @@ plugin/NVMTLEventSync.m	832	source	L3-full	đọc toàn bộ
 plugin/NVMTLForward.m	273	source	L0-not-read	Forwarder selector
 plugin/NVMTLGL.m	525	source	L0-not-read	OpenGL-on-Metal / GL vblank; không trên đường kéo/cuộn của WindowServer
 plugin/NVMTLGLVBlank.m	177	source	L0-not-read	OpenGL-on-Metal / GL vblank; không trên đường kéo/cuộn của WindowServer
-plugin/NVMTLLibraryLoad.m	2933	source	L2-partial	150-200, 340-420 (grep), 840-900
+plugin/NVMTLLibraryLoad.m	2933	source	L2-partial	95-140 (nạp translator, dlsym) + 152-420, 840-894 (cache); 150-200, 340-420 (grep), 840-900
 plugin/NVMTLObjects.h	323	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
-plugin/NVMTLObjects.m	5727	source	L2-partial	84-130, 313-456, 880-1060, 1170-1340 (nvmtlSurfaceIn 1222-1256 đọc lại cho F3), 2552-3597 chỉ mục hàm + 2797-3030 (build pass, depth/stencil, pipeline), 4100-4135, 5035-5150, 5700-5727
-plugin/NVMTLSass.m	342	source	L0-not-read	Đường dispatch SASS cho compute; không trên đường compositor
+plugin/NVMTLObjects.m	5727	source	L2-partial	84-130, 155-200 (NVMTLResSet), 313-456, 880-1060, 1170-1340, 2552-3597 chỉ mục hàm + 2605-2609, 2722-2800 (sampler pipeline), 2797-3030, 3038-3590 (render encoder: bind, draw, endEncoding, dynamic state), 4067-4660 (E78/G79, bytes ring, compute encoder), 4669-4897 chỉ mục (blit), 5035-5150, 5700-5727
+plugin/NVMTLSass.m	342	source	L2-partial	105-130 (bật/tắt đường direct SASS RTX 50); Đường dispatch SASS cho compute; không trên đường compositor
 plugin/NVMTLSassLaunch.m	516	source	L0-not-read	Đường dispatch SASS cho compute; không trên đường compositor
-plugin/NVMTLSassResolve.m	398	source	L0-not-read	Đường dispatch SASS cho compute; không trên đường compositor
+plugin/NVMTLSassResolve.m	398	source	L2-partial	58-75 (dlsym handle); Đường dispatch SASS cho compute; không trên đường compositor
 plugin/NVMTLVendorCompiler.m	608	source	L0-not-read	Lane compiler NVVM cho MPS/compute
 plugin/nvconv.metal	138	source	L0-not-read	Fast path convolution MPS
 plugin/nvconv_lib.h	4620	source	L0-not-read	Fast path convolution MPS
@@ -170,7 +170,7 @@ plugin/nvmtl_sass_gate.h	21	source	L0-not-read	Header hợp đồng/helper nhỏ
 plugin/nvmtl_sass_params.h	183	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
 plugin/nvmtl_tex_upload.h	61	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
 plugin/nvmtl_visibility_sum_spv.h	40	source	L1-grep	đầu file
-plugin/nvmtl_vk.c	8010	source	L2-partial	120-200, 680-715, 1040-1072, 1170-1470 (buffer create/import/stage), 1577-1800 (ngân sách, cấp phát ảnh), 1888-1975, 2319-2740 (bindless, keep pool, witness, perf accumulator), 2780-2990 (descriptor snapshot), 4699-5000 + chỉ mục hàm 5000-5600 (render pass), 5625-5930, 5935-6170 (residency res1/res2), 6164-6380; grep toàn file các bộ đếm cấp phát (F15)
+plugin/nvmtl_vk.c	8010	source	L2-partial	100-118, 120-200, 680-735 (nạp NVK, dlsym), 1040-1072, 1170-1470, 1577-1800, 1888-1975, 2319-2740, 2780-3100 (descriptor snapshot/reuse, bind buffer/sampler), 3261-3300 (bind set), 4699-5000, 5416-5600 (draw, index, vertex input, dynamic state), 5625-5930, 5935-6170, 6164-6380, 6590-6615 (barrier); grep toàn file bộ đếm cấp phát (F15)
 plugin/nvmtl_vk.h	366	source	L0-not-read	Header hợp đồng/helper nhỏ; đọc theo grep khi cần
 tools/bench_copy_coherence.m	40	test	L0-not-read	Bench chạy trên macOS; ghi nhận như công cụ đo có sẵn
 tools/bench_event_wait.m	130	test	L0-not-read	Bench chạy trên macOS; ghi nhận như công cụ đo có sẵn
@@ -659,7 +659,7 @@ translator/wrapper/Cargo.toml	13	build	L0-not-read	Bộ dịch AIR->SPIR-V (~311
 translator/wrapper/src/align_guard.rs	181	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
 translator/wrapper/src/buffer_addresses.rs	439	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
 translator/wrapper/src/g2_inline.rs	287	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
-translator/wrapper/src/lib.rs	840	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
+translator/wrapper/src/lib.rs	840	source	L1-grep	grep #[no_mangle] (17 entry point plugin dùng); Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
 translator/wrapper/src/linearize.rs	282	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
 translator/wrapper/src/table_ubo.rs	153	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này
 translator/wrapper/src/wide_loads.rs	305	source	L0-not-read	Bộ dịch AIR->SPIR-V (~311k dòng Rust, phần lớn test/mã sinh). Chạy lúc tạo shader và được spvcache lưu; ảnh hưởng frametime chủ yếu qua chất lượng SPIR-V sinh ra — cần profiler GPU, ngoài phạm vi lượt này

@@ -10,14 +10,16 @@ Thư mục này lưu tiến độ audit để các lượt sau không đọc l�
 | `inventory.tsv` | Toàn bộ 663 file Git theo dõi tại base: số dòng, loại, mức đọc, ghi chú/lý do |
 | `notes-kernel.md`, `notes-plugin-nvk.md` | Ghi chú đọc mã theo thành phần |
 | `test-results.md` | Kết quả từng `tools/test_*.py` trên base và trên từng branch sửa (PASS/FAIL/SKIP/thiếu phụ thuộc) |
+| `build-plugin-macos.md` | Quy trình build plugin tái lập trên macOS, kiểm artifact, đối chiếu chỉ đọc với NVK/translator đã cài (chưa chạy trên máy thật) |
 | `run_tool_tests.py` | Chạy và phân loại `tools/test_*.py` của một checkout (`python3 -I audit/run_tool_tests.py <checkout> --json <file>`) |
 
-## Branch của lượt 2 (fork cá nhân, chưa merge, không gửi upstream)
+## Branch (fork cá nhân, chưa merge, không gửi upstream)
 
 | Branch | Gốc | Nội dung |
 |---|---|---|
 | `claude/vigilant-mayer-ptq05r` | `75e2e28` | Script chẩn đoán chỉ đọc + thư mục `audit/` |
-| `claude/vigilant-mayer-ptq05r-t6-subwho-race` | `75e2e28` | F12/T6: khóa cho `nvmtl_subwho_note` + `tools/test_subwho_census.py` (commit `b38e6b3`) |
+| `claude/vigilant-mayer-ptq05r-t6-subwho-race` | `75e2e28` | F12/T6: khóa cho `nvmtl_subwho_note` + `tools/test_subwho_census.py` (`b38e6b3`); test chạy được trên macOS, không che lỗi biên dịch, đo overhead `tools/bench_subwho_census.py` (`ccdf592`) |
+| `claude/vigilant-mayer-ptq05r-plugin-build` | `75e2e28` | B1: `tools/nm_build_plugin.sh` + harness, `tools/test_plugin_abi_contract.py` (`a1588ac`) |
 | `claude/vigilant-mayer-ptq05r-t2-diag-counters` | `3c9c1d3` | T2: script đọc thêm counter có sẵn, allowlist `nvrm610.conf`, cảnh báo boot-arg + harness `tools/test_nm_readonly_diagnostics.{sh,py}` (commit `8adfb3b`) |
 
 ## Base
@@ -33,9 +35,9 @@ Thư mục này lưu tiến độ audit để các lượt sau không đọc l�
 | Mức | Nghĩa | Số file | Số dòng |
 |---|---|---:|---:|
 | `L3-full` | Đọc toàn bộ từng dòng | 35 | 4958 |
-| `L2-partial` | Đọc kỹ các khoảng dòng ghi trong cột ghi chú (đường hiệu năng); phần còn lại chỉ lướt cấu trúc | 14 | 42408 |
-| `L1-grep` | Chỉ grep / so sánh / parse / chạy test | 109 | 12801 |
-| `L0-not-read` | Chưa đọc; cột ghi chú nêu lý do | 506 | 334611 |
+| `L2-partial` | Đọc kỹ các khoảng dòng ghi trong cột ghi chú (đường hiệu năng); phần còn lại chỉ lướt cấu trúc | 16 | 43148 |
+| `L1-grep` | Chỉ grep / so sánh / parse / chạy test | 110 | 13641 |
+| `L0-not-read` | Chưa đọc; cột ghi chú nêu lý do | 503 | 333031 |
 
 Tổng 664 dòng trong `inventory.tsv` (663 file của base + `audit/run_tool_tests.py`). Số dòng `L2-partial` giữ nguyên vì
 cột "lines" là cả file; khoảng đã đọc của từng file ghi ở cột ghi chú.
@@ -44,12 +46,11 @@ Phần lớn số dòng L0 là translator (~311k dòng Rust, phần lớn là te
 
 ## Lượt sau nên đọc tiếp (theo ưu tiên)
 
-1. Mesa `17ca6174` `src/nouveau/vulkan/nvkmd/nvkmd.c` (`nvkmd_mem_map`/`unmap`) để kết luận F16 — cần nguồn Mesa (không tải
-   được trong môi trường cloud này).
+1. Mesa `17ca6174` `src/nouveau/vulkan/nvkmd/nvkmd.c` (`nvkmd_mem_map`/`unmap`) để kết luận F16; và runtime Vulkan của Mesa
+   (`vk_graphics_state`) để biết dynamic state trùng có bị lọc không — cần nguồn Mesa (không tải được trong cloud này).
 2. `kexts/NVRMFB/fb/nvrm-fb.cpp` 136-1490 (kapiInit, hotplug), 2340-2436 (applyMode), 2560-3130 (mode, timing).
-3. `plugin/NVMTLObjects.m` 3030-4900: phần còn lại của render/compute encoder (chi phí ghi lệnh mỗi draw).
-4. `plugin/nvmtl_vk.c` 5000-5600 đọc từng dòng (hiện chỉ có chỉ mục hàm), 6380-8010.
-5. `nvk/nvk-macos.patch`: `nvk_cmd_buffer.c`, `nvkmd_nvrm_ctx.c` phần chưa đọc.
+3. `plugin/NVMTLObjects.m` 4669-4897 từng dòng (blit encoder: copy, `synchronizeResource`), 5150-5700.
+4. `plugin/nvmtl_vk.c` 6380-8010.
 
 ## Quy ước
 
