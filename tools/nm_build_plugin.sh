@@ -4,8 +4,9 @@
 #
 # A local, repeatable build of the release NVMTLDriver binary on a Mac, with the flags of build/build_plugin_release.sh
 # (which builds on the author's "mini" over ssh), and read-only checks of the result. It never installs: it writes only
-# into <out-dir> (which must be new or empty and outside /Library, /System, /usr, /Applications), uses no sudo, does not
-# sign, and changes nothing under /Library.
+# into <out-dir> (new or empty; resolved through ".." and symbolic links and refused in /Library, /System, /usr,
+# /Applications and other system locations before anything is created), uses no sudo, does not sign, and changes
+# nothing under /Library.
 #
 #   build             git archive of plugin/ at <git-rev> -> one clang call with the release flags -> artifact checks:
 #                     x86_64 only, minos 15.0, a bundle (MH_BUNDLE), linked only against /System and /usr/lib, the
@@ -14,6 +15,9 @@
 #                     --twice builds a second time in a second directory and says whether the two binaries are identical.
 #   check-installed   compares the built binary with the installed /Library/GPUBundles/NVMTLDriver.bundle and lists which
 #                     private entry points the plugin looks up are exported by the installed NVK and translator. Reads only.
+#                     Exits 1 when the installed plugin, NVK or translator is missing, nm cannot read one of them, or a
+#                     required symbol is absent; absent optional symbols are listed apart. Exported names are a first
+#                     check only, not proof of ABI compatibility.
 #
 # --vk-include: the directory holding vulkan/vulkan_core.h. The release build used the include/ directory of the Mesa tree
 # the NVK in the package was built from (Mesa 17ca6174 with nvk/nvk-macos.patch); build/build_plugin.sh uses
@@ -24,24 +28,56 @@ set -uo pipefail
 
 nm_die() { echo "STOP: $*" >&2; exit 1; }
 nm_need() { local t; for t in "$@"; do command -v "$t" >/dev/null 2>&1 || nm_die "$t is not available (Xcode command line tools?)"; done; }
-nm_abs() { (cd "$1" 2>/dev/null && pwd -P); }
 
 # The release flags of build/build_plugin_release.sh, apart from the include directory.
 NM_FLAGS=(-arch x86_64 -mmacosx-version-min=15.0 -bundle -fobjc-arc -O1 -DNVMTL_RELEASE=1
           -Wno-protocol -Wno-incomplete-implementation -Werror=unguarded-availability-new)
 NM_FRAMEWORKS=(-framework Foundation -framework Metal -framework IOSurface -framework IOKit -framework CoreFoundation)
 
-# Refuses an output directory that is a system location, or one that already holds files.
+# nm_out_ok <dir>: checks the output directory completely, and only then creates it. The deepest part of the path that
+# exists is resolved with pwd -P (through every symbolic link and ".."); the parts below it, which do not exist yet, may
+# not be "." or "..". A dangling symbolic link, a target that is not a directory or not empty, and a resolved path in a
+# system location are refused before anything is created. The missing directories are then made one at a time; if one
+# cannot be made, or the result does not resolve to the path that was checked, the ones this call made are removed.
+NM_FORBIDDEN="/Library /System /usr /Applications /private/var/db /private/etc /etc /bin /sbin"
+nm_forbidden() {
+  local f
+  [ "$1" = / ] && return 0
+  for f in $NM_FORBIDDEN; do case "$1/" in "$f"/*) return 0 ;; esac; done
+  return 1
+}
+nm_undo() { local i; for ((i=${#NM_MADE[@]}-1; i>=0; i--)); do rmdir "${NM_MADE[i]}" 2>/dev/null; done; }
 nm_out_ok() {
-  local out=$1 parent abs
-  case "$out" in /*) ;; *) out="$PWD/$out" ;; esac
-  parent=$(dirname "$out"); mkdir -p "$parent" 2>/dev/null || nm_die "cannot create $parent"
-  abs="$(nm_abs "$parent")/$(basename "$out")"
-  case "$abs/" in /Library/*|/System/*|/usr/*|/Applications/*|/private/var/db/*|/bin/*|/sbin/*)
-    nm_die "$abs is a system location; build into a directory of your own" ;; esac
-  if [ -e "$abs" ] && [ -n "$(ls -A "$abs" 2>/dev/null)" ]; then nm_die "$abs is not empty"; fi
-  mkdir -p "$abs" || nm_die "cannot create $abs"
-  printf '%s\n' "$abs"
+  local out=$1 base rest= comp resolved d
+  [ -n "$out" ] || nm_die "empty output directory"
+  case "$out" in /*) ;; *) out="$(pwd -P)/$out" ;; esac
+  out=$(printf '%s' "$out" | sed -e 's://*:/:g' -e 's:\(.\)/$:\1:')
+  # walk up to the deepest part that exists; a symbolic link counts as existing, dangling or not
+  base=$out
+  while [ "$base" != / ] && [ ! -e "$base" ] && [ ! -L "$base" ]; do
+    comp=$(basename "$base")
+    case "$comp" in .|..) nm_die "$1: '$comp' in a part of the path that does not exist yet" ;; esac
+    rest="$comp${rest:+/$rest}"; base=$(dirname "$base")
+  done
+  if [ -L "$base" ] && [ ! -e "$base" ]; then nm_die "$1: $base is a dangling symbolic link"; fi
+  [ -d "$base" ] || nm_die "$1: $base exists and is not a directory"
+  resolved=$(cd "$base" 2>/dev/null && pwd -P) || nm_die "$1: cannot resolve $base"
+  resolved="${resolved%/}${rest:+/$rest}"; [ -n "$resolved" ] || resolved=/
+  if nm_forbidden "$resolved"; then nm_die "$1 resolves to $resolved, a system location; build into a directory of your own"; fi
+  if [ -z "$rest" ] && [ -n "$(ls -A "$resolved" 2>/dev/null)" ]; then nm_die "$1 ($resolved) is not empty"; fi
+  # every check passed: make the missing parts one at a time, remembering what this call made
+  NM_MADE=(); d=${resolved%"${rest:+/$rest}"}; d=${d%/}
+  local IFS=/
+  for comp in $rest; do
+    d="$d/$comp"
+    mkdir "$d" 2>/dev/null || { nm_undo; nm_die "cannot create $d (nothing left behind)"; }
+    NM_MADE+=("$d")
+  done
+  unset IFS
+  if [ "$(cd "$resolved" 2>/dev/null && pwd -P)" != "$resolved" ]; then
+    nm_undo; nm_die "$resolved changed while it was being created (nothing left behind)"
+  fi
+  printf '%s\n' "$resolved"
 }
 
 nm_vk_version() { sed -n 's/^#define VK_HEADER_VERSION \([0-9][0-9]*\).*/\1/p' "$1/vulkan/vulkan_core.h" | head -n 1; }
@@ -84,6 +120,9 @@ nm_build() {
   shift 2
   while [ $# -gt 0 ]; do case $1 in --vk-include) vk=${2:-}; shift ;; --twice) twice=1 ;; *) nm_die "unknown option $1" ;; esac; shift; done
   [ -n "$vk" ] || nm_die "--vk-include <dir> is required (the directory holding vulkan/vulkan_core.h)"
+  # made absolute here, before anything changes the working directory: the compiler runs inside src/plugin
+  [ -d "$vk" ] || nm_die "--vk-include $vk is not a directory"
+  vk=$(cd "$vk" 2>/dev/null && pwd -P) || nm_die "cannot resolve --vk-include $vk"
   [ -f "$vk/vulkan/vulkan_core.h" ] || nm_die "no vulkan/vulkan_core.h under $vk"
   nm_need git xcrun lipo vtool otool strings shasum
   here=$(cd "$(dirname "$0")/.." && pwd)
@@ -122,23 +161,32 @@ nm_build() {
 NM_NVK_SYMS="nvmtl_nvk_stage_import nvmtl_nvk_surface_dirty nvmtl_nvk_sample_depth_contract_v1 nvmtl_nvk_sample_depth_image_v1 nvmtl_nvk_sparse_bind_v1 nvmtl_nvk_dispatch_sass_v1 nvmtl_nvk_dispatch_sass_v3 nvmtl_nvk_sass_image_handle_v1 nvmtl_nvk_sass_sampler_handle_v1 nvkmd_nvrm_gsub_stats !vkGetInstanceProcAddr"
 NM_XLATE_SYMS="!nvmtl_translate nvmtl_translate_free nvmtl_translate_fc nvmtl_translate_samplers nvmtl_translate_set_caps nvmtl_translate_set_threadgroup_lengths nvmtl_lower_buffer_addresses nvmtl_lower_buffer_addresses_ex nvmtl_table_to_uniform nvmtl_visible_refs nvmtl_link_visible nvmtl_link_runtime nvmtl_link_externs nvmtl_lower_mesh nvmtl_lower_mesh2 nvmtl_reflect nvmtl_reflect_fc"
 
-# nm_exports <dylib> <symbols>: one line per symbol, present or absent in the dylib's exports.
+# nm_exports <dylib> <symbols>: one line per symbol, present or absent in the dylib's exports. A missing file, nm
+# failing on it and an absent required symbol go to NM_BAD; absent optional symbols go to NM_OPT.
 nm_exports() {
-  local lib=$1 s name ex
-  [ -r "$lib" ] || { echo "  MISSING: $lib"; return 0; }
-  ex=$(nm -gU "$lib" 2>/dev/null | awk '{print $NF}' | sed 's/^_//')
+  local lib=$1 s name ex err
+  if [ ! -r "$lib" ]; then echo "  MISSING: $lib"; NM_BAD+=("missing file $lib"); return 0; fi
+  err=$(mktemp) || nm_die "mktemp failed"
+  if ! ex=$(nm -gU "$lib" 2>"$err"); then
+    echo "  nm FAILED on $lib: $(head -c 300 "$err")"; rm -f "$err"; NM_BAD+=("nm could not read $lib"); return 0
+  fi
+  rm -f "$err"
+  ex=$(printf '%s\n' "$ex" | awk 'NF{print $NF}' | sed 's/^_//')
   for s in $2; do
     name=${s#!}
     if printf '%s\n' "$ex" | grep -qx -- "$name"; then echo "  present  $name"
-    elif [ "$s" != "$name" ]; then echo "  ABSENT   $name  (required: the plugin cannot run without it)"
-    else echo "  absent   $name  (optional: its feature is off)"; fi
+    elif [ "$s" != "$name" ]; then echo "  ABSENT   $name  (required: the plugin cannot run without it)"; NM_BAD+=("required symbol $name absent from $lib")
+    else echo "  absent   $name  (optional: its feature is off)"; NM_OPT+=("$name"); fi
   done
 }
 
+# Returns 1 when the installed plugin, NVK or translator is missing, nm cannot read one of them, or a required symbol is
+# absent. Absent optional symbols are listed apart and do not fail it.
 nm_installed() {
-  local built=${1:-} rev=${2:-} R=${NM_ROOT:-} inst ver tag here
+  local built=${1:-} rev=${2:-} R=${NM_ROOT:-} inst ver tag here b
   [ -n "$built" ] && [ -r "$built" ] || nm_die "usage: check-installed <built NVMTLDriver> [<git-rev>]"
   nm_need shasum otool vtool nm
+  NM_BAD=(); NM_OPT=()
   inst="$R/Library/GPUBundles/NVMTLDriver.bundle/Contents/MacOS/NVMTLDriver"
   echo "== plugin: built vs installed (read only)"
   printf '%-10s sha256 %s  minos %s  uuid %s\n' built "$(shasum -a 256 "$built" | cut -d' ' -f1)" \
@@ -146,9 +194,9 @@ nm_installed() {
   if [ -r "$inst" ]; then
     printf '%-10s sha256 %s  minos %s  uuid %s\n' installed "$(shasum -a 256 "$inst" | cut -d' ' -f1)" \
       "$(vtool -show-build "$inst" 2>/dev/null | awk '/minos/{print $2; exit}')" "$(otool -l "$inst" | awk '/uuid/{print $2; exit}')"
-  else echo "MISSING: $inst"; fi
+  else echo "MISSING: $inst"; NM_BAD+=("missing file $inst"); fi
   ver=$(cat "$R/Library/NullMoth/driver-version" 2>/dev/null)
-  echo "installed driver-version: ${ver:-MISSING}"
+  echo "installed driver-version: ${ver:-MISSING (not required)}"
   if [ -n "$rev" ]; then
     here=$(cd "$(dirname "$0")/.." && pwd)
     tag=$(git -C "$here" describe --tags --exact-match "$rev" 2>/dev/null)
@@ -160,6 +208,17 @@ nm_installed() {
   nm_exports "$R/Library/GPUBundles/nvmtl/libvulkan_nouveau.dylib" "$NM_NVK_SYMS"
   echo "== installed translator exports the plugin looks up"
   nm_exports "$R/Library/GPUBundles/nvmtl/libnvmtl_translate.dylib" "$NM_XLATE_SYMS"
+  echo "== result"
+  echo "NOTE: this only checks that the names the plugin looks up are exported. It is a first check, not proof of ABI"
+  echo "      compatibility: signatures, structure layouts and behaviour are not checked here (the source-level contract"
+  echo "      is tools/test_plugin_abi_contract.py)."
+  if [ ${#NM_OPT[@]} -gt 0 ]; then echo "optional symbols absent (${#NM_OPT[@]}): ${NM_OPT[*]}"
+  else echo "optional symbols absent: none"; fi
+  if [ ${#NM_BAD[@]} -gt 0 ]; then
+    echo "FAILED (${#NM_BAD[@]}):"; for b in "${NM_BAD[@]}"; do echo "  - $b"; done
+    return 1
+  fi
+  echo "required files and symbols: all present"
 }
 
 nm_main() {
