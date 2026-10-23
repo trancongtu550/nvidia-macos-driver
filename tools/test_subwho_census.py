@@ -8,7 +8,10 @@ the lock released, so a log that submits again (re-entry) neither deadlocks nor 
 ThreadSanitizer (when this machine has its runtime) the threaded arms must be race-free, and under AddressSanitizer the
 table must stay in bounds.
 Negative controls must fail: the function without its lock (ThreadSanitizer reports the race), one that logs with the lock
-held, and one whose bound lets a 25th caller in."""
+held, and one whose bound lets a 25th caller in.
+Platforms: the fixture is plain C11 with pthreads (no pthread_barrier, which macOS lacks), so it builds with gcc or clang on
+Linux and with Apple clang on macOS; $CC picks the compiler. A sanitizer arm is skipped only when a trivial program built
+with that sanitizer does not run here; when the trivial program runs and the fixture does not build, the test fails."""
 import os
 import pathlib
 import subprocess
@@ -42,6 +45,7 @@ assert unbounded_control != helper
 
 fixture = r'''
 #include <pthread.h>
+#include <sched.h>
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -68,20 +72,21 @@ static void log_check(void) {
 }
 #define NWHO 40
 static char names[NWHO][8]; static const char *who[NWHO];
-static unsigned T, N, K, mult; static pthread_barrier_t go;
+static unsigned T, N, K, mult; static unsigned ready;
 static void *worker(void *arg) {
     const unsigned t = (unsigned)(uintptr_t)arg;
-    pthread_barrier_wait(&go);
+    // start together: every worker spins until all have arrived
+    __atomic_add_fetch(&ready, 1, __ATOMIC_ACQ_REL);
+    while (__atomic_load_n(&ready, __ATOMIC_ACQUIRE) < T) sched_yield();
     for (unsigned j = 0; j < N; j++) nvmtl_subwho_note(who[(t * mult + j) % K], 1);
     return NULL;
 }
 static void run(unsigned threads, unsigned calls, unsigned callers, unsigned m) {
     T = threads; N = calls; K = callers; mult = m; nlines = 0;
     memset(g_subwho, 0, sizeof g_subwho); g_subwho_n = 0;
-    pthread_t th[16]; pthread_barrier_init(&go, NULL, T);
+    pthread_t th[16]; ready = 0;
     for (unsigned t = 0; t < T; t++) pthread_create(&th[t], NULL, worker, (void *)(uintptr_t)t);
     for (unsigned t = 0; t < T; t++) pthread_join(th[t], NULL);
-    pthread_barrier_destroy(&go);
 }
 static unsigned long long expected(const char *w) {
     unsigned long long e = 0;
@@ -142,29 +147,60 @@ def compilers():
     return seen
 
 
+PROBE = 'int main(void) { return 0; }\n'
+
+
+def sanitizer_compiler(d, sanitizer):
+    """The first compiler whose trivial program builds and runs with this sanitizer, or None with the reasons."""
+    src = pathlib.Path(d) / 'probe.c'
+    src.write_text(PROBE)
+    why = []
+    for cc in compilers():
+        exe = pathlib.Path(d) / ('probe-' + sanitizer)
+        try:
+            c = subprocess.run([cc, '-pthread', '-fsanitize=' + sanitizer, '-o', str(exe), str(src)], capture_output=True, text=True)
+        except FileNotFoundError:
+            continue
+        if c.returncode:
+            why.append('%s: %s' % (cc, c.stderr.strip()[-200:]))
+            continue
+        r = subprocess.run([str(exe)], capture_output=True, text=True, timeout=60)
+        if r.returncode == 0:
+            return cc, why
+        why.append('%s: runtime does not start: %s' % (cc, (r.stdout + r.stderr).strip()[-200:]))
+    return None, why
+
+
 def build(d, code, sanitizer=None):
-    """Compile the fixture; returns the executable, or None when no compiler here has the sanitizer's runtime."""
+    """Compile the fixture. Returns (executable, compiler), or (None, reasons) only when no compiler here runs a trivial
+    program with the sanitizer. A fixture that does not build where the trivial program does is an error, never a skip."""
     src = pathlib.Path(d) / 't.c'
     src.write_text(fixture.replace('HELPER', code))
     exe = pathlib.Path(d) / ('t-' + (sanitizer or 'plain'))
-    flags = ['-std=gnu11', '-O1', '-g', '-pthread'] + (['-fsanitize=' + sanitizer] if sanitizer else [])
+    flags = ['-std=gnu11', '-O1', '-g', '-pthread', '-Werror=implicit-function-declaration']
+    if sanitizer:
+        cc, why = sanitizer_compiler(d, sanitizer)
+        if cc is None:
+            return None, why
+        candidates = [cc]
+        flags.append('-fsanitize=' + sanitizer)
+    else:
+        candidates = compilers()
     errors = []
-    for cc in compilers():
+    for cc in candidates:
         try:
             c = subprocess.run([cc] + flags + ['-o', str(exe), str(src)], capture_output=True, text=True)
         except FileNotFoundError:
             continue
-        if c.returncode == 0:
-            # a sanitizer can link and still have no usable runtime on this machine: probe it
-            probe = subprocess.run([str(exe), 'none'], capture_output=True, text=True, timeout=60)
-            if probe.returncode == 2 and 'arm?' in probe.stdout:
-                return exe
-            errors.append(cc + ': runtime does not start: ' + (probe.stdout + probe.stderr)[-300:])
-        else:
-            errors.append(cc + ': ' + c.stderr[-300:])
-    if sanitizer:
-        return None
-    raise AssertionError('no C compiler builds the fixture:\n' + '\n'.join(errors))
+        if c.returncode:
+            errors.append(cc + ': ' + c.stderr[-600:])
+            continue
+        probe = subprocess.run([str(exe), 'none'], capture_output=True, text=True, timeout=60)
+        if probe.returncode == 2 and 'arm?' in probe.stdout:
+            return exe, cc
+        errors.append(cc + ': the fixture built but does not start: ' + (probe.stdout + probe.stderr)[-300:])
+    raise AssertionError('the fixture does not build%s:\n%s' % (' with -fsanitize=' + sanitizer if sanitizer else '',
+                                                                  '\n'.join(errors) or 'no C compiler found'))
 
 
 def run(exe, arm):
@@ -178,9 +214,10 @@ def run(exe, arm):
 class SubwhoCensus(unittest.TestCase):
     def arms(self, code, sanitizer, arms):
         with tempfile.TemporaryDirectory() as d:
-            exe = build(d, code, sanitizer)
+            exe, cc = build(d, code, sanitizer)
             if exe is None:
-                self.skipTest('no compiler here has the %s runtime' % sanitizer)
+                self.skipTest('no compiler here runs a trivial %s-sanitized program: %s' % (sanitizer, '; '.join(cc)))
+            print('[%s, %s]' % (cc, sanitizer or 'no sanitizer'))
             return {arm: run(exe, arm) for arm in arms}
 
     def assert_pass(self, results):
