@@ -5705,28 +5705,33 @@ void nvmtl_vk_gsub_nvk_stats(uint64_t *out, unsigned n)
 }
 static struct { const char *who; uint64_t n; uint64_t ns; } g_subwho[24];
 static unsigned g_subwho_n;
+// Submissions come from the execution worker and from encode threads (surface and texture uploads) before either takes
+// nvmtl_submit_mutex, so the table needs its own lock. nvlog runs after the unlock: it is never called with this held.
+static pthread_mutex_t g_subwho_lock = PTHREAD_MUTEX_INITIALIZER;
 static void nvmtl_subwho_note(const char *who, uint64_t ns)
 {
     if (!who) who = "?";
+    char line[1200]; size_t off = 0; uint64_t total = 0;
+    pthread_mutex_lock(&g_subwho_lock);
     unsigned i = 0;
     for (; i < g_subwho_n; i++) if (g_subwho[i].who == who) break;
     if (i == g_subwho_n) {
-        if (g_subwho_n >= 24) return;
+        if (g_subwho_n >= sizeof g_subwho / sizeof g_subwho[0]) { pthread_mutex_unlock(&g_subwho_lock); return; }
         g_subwho[g_subwho_n].who = who; g_subwho[g_subwho_n].n = 0; g_subwho[g_subwho_n].ns = 0;
         i = g_subwho_n++;
     }
     g_subwho[i].n++; g_subwho[i].ns += ns;
-    uint64_t total = 0;
     for (unsigned k = 0; k < g_subwho_n; k++) total += g_subwho[k].n;
-    if ((total & 0xfff) == 0) {
-        char line[1200]; size_t off = 0;
+    const int census = (total & 0xfff) == 0;
+    if (census) {
         for (unsigned k = 0; k < g_subwho_n && off < sizeof line - 90; k++) {
             int w = snprintf(line + off, sizeof line - off, "%s%s=%llu", off ? ", " : "",
                              g_subwho[k].who, (unsigned long long)g_subwho[k].n);
             if (w > 0) off += (size_t)w;
         }
-        nvlog("vk: submit census over %llu submissions - %s", (unsigned long long)total, line);
     }
+    pthread_mutex_unlock(&g_subwho_lock);
+    if (census) nvlog("vk: submit census over %llu submissions - %s", (unsigned long long)total, line);
 }
 int nvmtl_vk_submit_wait_at(nvk_cmdbuf *c, const char *who)
 {
