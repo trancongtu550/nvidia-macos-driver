@@ -32,7 +32,7 @@ bằng `git ls-remote` ngày 2026-10-23). Ghi chú làm việc; bản tổng h�
 
 ## kexts/NVRM/accel/nvaccel_stubs.h (187 dòng) — ĐÃ ĐỌC TOÀN BỘ
 
-## kexts/NVRMFB/fb/nvrm-fb.cpp (3978 dòng) — ĐỌC CÓ CHỌN LỌC (xem read-log.md)
+## kexts/NVRMFB/fb/nvrm-fb.cpp (3978 dòng) — ĐỌC CÓ CHỌN LỌC (khoảng dòng: `inventory.tsv`)
 
 Đã đọc kỹ: 1-135, 1490-1760 (trace, chờ flip, present stats, submitConfig), 1754-2340 (sampler, reflip, gamma,
 cursor, vblank), 2436-2560 (start: các thread call), 3130-3530 (verifyAperture, vramGrant/Release,
@@ -62,3 +62,19 @@ callPlatformFunction), 3530-3680 (flipToMemory).
 - `kexts/NVRM/agdc/nvrm-agdc.cpp` khác `kexts/NVRMAGDC/nvrm-agdc.cpp`.
 - Header ABI trùng nhưng hiện khớp: `nvrm_vram_abi.h` (3 bản giống nhau), `nvrm_gpuva_abi.h` (2 bản giống nhau).
   `nvrm_surfshare_abi.h` khác giữa NVRM và NVRMFB, nhưng NVRMFB không dùng phần khác biệt.
+
+## Lượt 2
+
+- `kexts/NVRM/nvrm_pageoff.c` (đọc toàn bộ): `nvrm_ce_copy_to_pages` 109-135 giữ `rmapiLockAcquire` +
+  `rmDeviceGpuLocksAcquire` trong khi `_nvrmCopyLocked` chờ copy engine bằng `osDelayUs(10)` lặp tới 200000 lần
+  (80-83, 99-103); `osDelayUs` -> `os_delay_us` -> `IODelay` (`os-xnu.cpp:199`). Xem F14.
+- `kexts/NVRM/nvrm_surfshare.cpp` (đọc toàn bộ): sysctl `debug.nvrm_pageoff_runs/_pages/_coalesced/_perpage` (46-49), đăng ký
+  ở lần page-off đầu (60-63).
+- `kexts/NVRM/os-xnu2.cpp` 1092-1158: `nv_alloc_pages` luôn gọi `nv_watch_init` và `nv_q_init`; `nv_free_pages` -> `nv_q_put`
+  (quarantine: giữ 2 s, tối đa 256 MB / 4096 mục, kiểm `nv_pg_still_mapped` từng trang). Work item mỗi lần một kernel
+  thread (1295). 332-340: `nvrmdiag` mở sysctl chẩn đoán in địa chỉ vật lý, chỉ root đọc.
+- `kexts/NVRMFB/fb/nvrm-fb.cpp` 3260-3431 (`vramGrant`) đọc lại từng dòng cho F1: các biến chỉ gate bảo vệ là bảng park
+  (3181-3182), `gAllocations`, `advanceFlipEpoch`, `fVramGrants`; `fDev`/`fKms` không bao giờ bị đặt lại. Bảng phân tích
+  trong `findings.md` F1.
+- Build (F11): đọc mọi điểm vào build; NVRM.kext và NVRMFB.kext không có script; cây NVIDIA 615.78.08 không xử lý Darwin
+  trong makefile (`utils.mk:122-139`).

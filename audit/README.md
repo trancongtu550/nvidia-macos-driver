@@ -9,6 +9,16 @@ Thư mục này lưu tiến độ audit để các lượt sau không đọc l�
 | `plan.md` | Tối ưu upstream đã có, patch khả thi + kiểm tra, dữ liệu phần cứng còn thiếu, công việc đầu tiên đề xuất |
 | `inventory.tsv` | Toàn bộ 663 file Git theo dõi tại base: số dòng, loại, mức đọc, ghi chú/lý do |
 | `notes-kernel.md`, `notes-plugin-nvk.md` | Ghi chú đọc mã theo thành phần |
+| `test-results.md` | Kết quả từng `tools/test_*.py` trên base và trên từng branch sửa (PASS/FAIL/SKIP/thiếu phụ thuộc) |
+| `run_tool_tests.py` | Chạy và phân loại `tools/test_*.py` của một checkout (`python3 -I audit/run_tool_tests.py <checkout> --json <file>`) |
+
+## Branch của lượt 2 (fork cá nhân, chưa merge, không gửi upstream)
+
+| Branch | Gốc | Nội dung |
+|---|---|---|
+| `claude/vigilant-mayer-ptq05r` | `75e2e28` | Script chẩn đoán chỉ đọc + thư mục `audit/` |
+| `claude/vigilant-mayer-ptq05r-t6-subwho-race` | `75e2e28` | F12/T6: khóa cho `nvmtl_subwho_note` + `tools/test_subwho_census.py` (commit `b38e6b3`) |
+| `claude/vigilant-mayer-ptq05r-t2-diag-counters` | `3c9c1d3` | T2: script đọc thêm counter có sẵn, allowlist `nvrm610.conf`, cảnh báo boot-arg + harness `tools/test_nm_readonly_diagnostics.{sh,py}` (commit `8adfb3b`) |
 
 ## Base
 
@@ -22,24 +32,27 @@ Thư mục này lưu tiến độ audit để các lượt sau không đọc l�
 
 | Mức | Nghĩa | Số file | Số dòng |
 |---|---|---:|---:|
-| `L3-full` | Đọc toàn bộ từng dòng | 30 | 4625 |
+| `L3-full` | Đọc toàn bộ từng dòng | 35 | 4958 |
 | `L2-partial` | Đọc kỹ các khoảng dòng ghi trong cột ghi chú (đường hiệu năng); phần còn lại chỉ lướt cấu trúc | 14 | 42408 |
-| `L1-grep` | Chỉ grep / so sánh / parse / chạy test | 111 | 13004 |
-| `L0-not-read` | Chưa đọc; cột ghi chú nêu lý do | 508 | 334670 |
+| `L1-grep` | Chỉ grep / so sánh / parse / chạy test | 109 | 12801 |
+| `L0-not-read` | Chưa đọc; cột ghi chú nêu lý do | 506 | 334611 |
+
+Tổng 664 dòng trong `inventory.tsv` (663 file của base + `audit/run_tool_tests.py`). Số dòng `L2-partial` giữ nguyên vì
+cột "lines" là cả file; khoảng đã đọc của từng file ghi ở cột ghi chú.
 
 Phần lớn số dòng L0 là translator (~311k dòng Rust, phần lớn là test và mã sinh). **Không tuyên bố đã đọc hết repo.**
 
 ## Lượt sau nên đọc tiếp (theo ưu tiên)
 
-1. `kexts/NVRMFB/fb/nvrm-fb.cpp` 136-1490 (kapiInit, hotplug), 2340-2436 (applyMode), 2560-3130 (mode, timing) — kiểm tra
-   thêm đường dùng gate và các lần cấp phát lúc đổi mode.
-2. `plugin/NVMTLObjects.m`: render/compute encoder (2600-4900) — binding, barrier, chi phí ghi lệnh mỗi draw.
-3. `plugin/nvmtl_vk.c` 1213-1470 (tạo buffer, import host), 1719-1890 (cấp phát ảnh), 2319-3300 (bindless/descriptor),
-   4699-5600 (render pass).
-4. `nvk/nvk-macos.patch`: `nvkmd_nvrm_mem.c`, `nvkmd_nvrm_va.c`, `nvRmSemSurf.c`, `nvk_cmd_buffer.c`.
-5. `kexts/NVRM/os-xnu2.cpp` phần còn lại (cấp phát trang, map) và `nvrm_pageoff.c` (copy engine của page-off).
+1. Mesa `17ca6174` `src/nouveau/vulkan/nvkmd/nvkmd.c` (`nvkmd_mem_map`/`unmap`) để kết luận F16 — cần nguồn Mesa (không tải
+   được trong môi trường cloud này).
+2. `kexts/NVRMFB/fb/nvrm-fb.cpp` 136-1490 (kapiInit, hotplug), 2340-2436 (applyMode), 2560-3130 (mode, timing).
+3. `plugin/NVMTLObjects.m` 3030-4900: phần còn lại của render/compute encoder (chi phí ghi lệnh mỗi draw).
+4. `plugin/nvmtl_vk.c` 5000-5600 đọc từng dòng (hiện chỉ có chỉ mục hàm), 6380-8010.
+5. `nvk/nvk-macos.patch`: `nvk_cmd_buffer.c`, `nvkmd_nvrm_ctx.c` phần chưa đọc.
 
 ## Quy ước
 
-- Không sửa source driver, cấu hình máy, EFI/BIOS/SIP/AMFI/firmware; không cài, không merge, không phát hành.
+- Không sửa cấu hình máy, EFI/BIOS/SIP/AMFI/firmware; không cài, không merge, không phát hành, không gửi upstream.
+  Sửa source driver chỉ khi có bằng chứng và test, mỗi bản sửa trên branch riêng (F12/T6).
 - Mọi số liệu "tác động" là giả thuyết cho tới khi đo trên máy thật.

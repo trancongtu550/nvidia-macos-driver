@@ -1,4 +1,4 @@
-# Kế hoạch triển khai — sau audit lượt 1
+# Kế hoạch triển khai — cập nhật sau audit lượt 2
 
 Base: `75e2e28` (v2.5.3 = upstream main). Phát hiện chi tiết: `findings.md`. Phạm vi đã đọc: `README.md` +
 `inventory.tsv` trong thư mục này.
@@ -37,12 +37,14 @@ Base: `75e2e28` (v2.5.3 = upstream main). Phát hiện chi tiết: `findings.md`
 
 | ID | Thành phần | Thay đổi | Phát hiện | Build được từ repo? | Kiểm tra độc lập phần cứng | Kiểm tra cần máy thật |
 |---|---|---|---|---|---|---|
-| T1 | plugin + script | Bộ đếm hiệu năng **opt-in** cho bản release (khóa `NVMTL_PERF_SUMMARY=1` trong `nvrm610.conf`): surface-in/out (số lần, byte, tổng/max µs), chờ submit theo nhãn, sync buffer; in một dòng tóm tắt mỗi 10 s khi có hoạt động. Script đọc dòng đó. Mặc định tắt, không đổi hành vi | F3, F8, F9, F13 | Có (Xcode + Vulkan-Headers, lệnh trong `build/build_plugin_release.sh`) | Test C/Python: bộ tích lũy (cộng dồn, max, tràn số, đa luồng), parse khóa, mặc định tắt; chạy lại toàn bộ `tools/test_*.py` | Build plugin, so hash, cài (cần duyệt riêng), bật khóa, đo 3 lượt |
-| T2 | script | Đọc thêm các counter **đã có**: `nvrmfb_vram_grants/_bytes/releases`, `nvaccel_vm_alloc/_parked/_unparked/_refused`, `nvaccel_res_new/_free`, `nvaccel_map_commit`, `nvrm_isr_count`, `nvrm_evt_waits`; in `nvrm610.conf` đã lọc; cảnh báo boot-arg debug (`nvfbsample`, `nvhud`, `-nvaccelverbose`, `-nvrmnoflip`) | F1, F2, F7 | Không cần build | Mở rộng harness giả lập hiện có | Chạy script |
+| T1 | plugin + script | (Lượt 2: đã có sẵn `NVMTL_PERF_LOG` in `PERFSUB` ra stderr mỗi submit — xem F13; T1 phải dùng lại `g_perf`/`NVP_*`, chỉ thêm điểm đo surface-in/out và kênh xuất định kỳ đọc được với WindowServer.) Bộ đếm hiệu năng **opt-in** cho bản release (khóa `NVMTL_PERF_SUMMARY=1` trong `nvrm610.conf`): surface-in/out (số lần, byte, tổng/max µs), chờ submit theo nhãn, sync buffer; in một dòng tóm tắt mỗi 10 s khi có hoạt động. Script đọc dòng đó. Mặc định tắt, không đổi hành vi | F3, F8, F9, F13 | Có (Xcode + Vulkan-Headers, lệnh trong `build/build_plugin_release.sh`) | Test C/Python: bộ tích lũy (cộng dồn, max, tràn số, đa luồng), parse khóa, mặc định tắt; chạy lại toàn bộ `tools/test_*.py` | Build plugin, so hash, cài (cần duyệt riêng), bật khóa, đo 3 lượt |
+| T2 | script | **ĐÃ LÀM** (branch `claude/vigilant-mayer-ptq05r-t2-diag-counters`, `8adfb3b`). Đọc thêm các counter **đã có**: `nvrmfb_vram_grants/_bytes/releases`, `nvaccel_vm_alloc/_parked/_unparked/_refused`, `nvaccel_res_new/_free`, `nvaccel_map_commit`, `nvrm_isr_count`, `nvrm_evt_waits`; in `nvrm610.conf` đã lọc; cảnh báo boot-arg debug (`nvfbsample`, `nvhud`, `-nvaccelverbose`, `-nvrmnoflip`) | F1, F2, F7 | Không cần build | Mở rộng harness giả lập hiện có | Chạy script |
 | T3 | NVRMFB | Xóa VRAM ngoài gate; thêm counter: thời gian chờ/giữ gate, thời gian xóa | F1 | **Không** (F11) | Tách hàm, biên dịch bằng clang++ với stub như `tools/test_boot_raster_modes.py`: thứ tự lock, nhánh lỗi giải phóng bộ nhớ, publish chỉ sau khi xóa | Boot trên 4070 Ti, đo grant + flip |
 | T4 | NVAccel | Xuất counter dirty/pageoff đã có + thời gian pageoff; `ALOGV` cho log tạo object | F2, F7 | **Không** (cần cây RM build cho Darwin) | Test Python kiểm khai báo/đăng ký sysctl và log bị giới hạn | Boot thử |
 | T5 | NVRMFB | Counter độ trễ IRQ->giao VBL | F4 | **Không** | Helper tách rời | Boot thử |
-| T6 | plugin | Khóa cho `nvmtl_subwho_note` | F12 | Có | Harness C đa luồng | Không bắt buộc |
+| T6 | plugin | **ĐÃ LÀM** (branch `claude/vigilant-mayer-ptq05r-t6-subwho-race`, `b38e6b3`). Khóa cho `nvmtl_subwho_note`, `nvlog` ngoài khóa | F12 | Có (chưa build trên macOS) | `tools/test_subwho_census.py`: thường + TSAN + ASAN, 3 đối chứng âm | Build plugin để chắc biên dịch được với Xcode |
+| T8 | plugin | Bộ đếm cấp phát bằng `__atomic_*` | F15 | Có | Harness C đa luồng như T6 | Không bắt buộc |
+| T9 | NVK | Khóa cho `dev->mappings` — **chỉ khi** F16 được xác nhận trên Mesa gốc | F16 | Có (build NVK) | Harness C với stub hash table | Build NVK |
 | T7 | plugin (nghiên cứu) | Đưa surface-in thành bất đồng bộ qua prologue | F3 | Có | Fixture Objective-C kiểu `tools/test_submission_copies.py` (cần macOS) | Bắt buộc; rủi ro cao |
 
 Thí nghiệm **không cần build** (mỗi cái cần người dùng đồng ý riêng, đều đảo ngược được):
@@ -77,7 +79,8 @@ driver khi tính năng đo tắt.
 **Không làm:** không đổi đồng bộ, fence, timeout, xóa bộ nhớ, đường copy; không đụng kext; không cài; không merge; không
 gửi upstream.
 
-**Tiêu chí hoàn thành trong cloud:** test mới pass; toàn bộ test hiện có giữ kết quả 48/70 như baseline; `bash -n` script; test
+**Tiêu chí hoàn thành trong cloud:** test mới pass; mọi test hiện có giữ đúng trạng thái như baseline (lượt 2, lịch sử git
+đầy đủ: 51 PASS / 0 FAIL / 0 SKIP / 18 MISSING / 1 DEPFAIL trên 70, chi tiết `test-results.md`); `bash -n` script; test
 giả lập script pass. **Không** tuyên bố tối ưu được gì.
 
 **Bước trên máy thật (người dùng tự làm, mỗi bước cần duyệt):** build plugin (Xcode), sao lưu
@@ -89,6 +92,8 @@ quả. Hoàn tác: chép lại bản sao lưu, xóa khóa.
 | Hạng mục | Kết quả |
 |---|---|
 | Công cụ | Linux x86_64, Python 3.13, clang/gcc (Linux), bash 5.2, mawk, cargo; **không** có `xcrun`, macOS SDK, Metal, Foundation, `ditto` |
-| Test repo | `tools/test_*.py`: 48/70 pass; 22 không chạy được vì cần công cụ macOS, lịch sử git đầy đủ (clone shallow) hoặc translator đã build |
+| Test repo | Lượt 1 (clone shallow): 48/70 pass. Lượt 2 (lịch sử đầy đủ): 51 PASS, 0 FAIL, 0 SKIP, 18 MISSING (xcrun/Foundation/Metal/ditto, header macOS, translator build, 1 commit không có trong lịch sử công khai), 1 DEPFAIL (`test_primary_gpu_install.py`: `ditto` không có) — xem `test-results.md` |
+| Sanitizer | gcc 13: ThreadSanitizer và AddressSanitizer chạy được; clang: thiếu runtime TSAN |
+| Mạng | Không tải được nguồn Mesa (gitlab.freedesktop.org bị proxy từ chối) |
 | Build | Không build được plugin, NVAccel, NVRMFB, NVK cho macOS trong cloud |
 | GPU | Không có; mọi kiểm thử hiệu năng phải làm trên máy thật |

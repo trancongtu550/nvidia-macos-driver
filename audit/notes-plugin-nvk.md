@@ -63,4 +63,24 @@ Base `75e2e28`. Ghi chú làm việc; bản tổng hợp nằm ở `findings.md`
   semaphore release có WFI + NON_STALL_INTERRUPT, rồi doorbell. 64 slot lệnh / ring 64 KB; chờ slot nếu vòng đầy
   (935-941). Đường không async (`exec_ctx_flush` 1063-1159) chờ đồng bộ với backoff.
 - `nvmtl_cfg.h`: đọc `nvrm610.conf` một lần (8 KB).
-- Không đọc: NAK compiler, ray tracing, descriptor, BVH (ngoài đường compositor).
+- Không đọc: NAK compiler, ray tracing, BVH, `nvk_cmd_buffer.c` (ngoài đường compositor).
+
+## Lượt 2
+
+- `nvmtl_subwho_note` (5706-5730): bên gọi duy nhất `nvmtl_vk_submit_begin_at` 5739, trước `nvmtl_submit_mutex` (5764).
+  Race đã chứng minh và sửa trên branch T6 (F12).
+- Bộ đo có sẵn: `nvmtl_perf_now`/`nvmtl_perf_note`/`nvmtl_perf_submit` (2704-2740), bật bằng `NVMTL_PERF_LOG` (đọc được từ
+  conf ở bản release), in `PERFSUB` ra stderr mỗi submit (gọi ở 5905). Điểm đo: `begin` (4703-4729), `bufnew/bufpool`
+  (1291-1303), `bufdel`, `heap`, `syncin`, `syncout`, `copy`.
+- Bộ đếm cấp phát không khóa (F15): `g_alloc_bytes` 153, `g_vram_bytes/g_sys_bytes` 164; người đọc `nvmtl_vk_allocated_bytes`
+  6164, ngân sách dự phòng 1594, working set 1692.
+- Render pass (4699-5300): `nvmtl_vk_cmd_begin_pass` 4804-4986 tạo `VkFramebuffer` mỗi pass (4937), giữ trong `c->fbs`;
+  biến thể render pass theo load action tạo một lần dưới `g_rpv_lock` (4733-4777); render pass "shape" cho resolve
+  (5107-5208).
+- Bindless (2319-2580): heap descriptor tạo lúc khởi động (2343-2400); `nvmtl_bl_slot` hash view->slot dưới `g_bl_lock`;
+  `nvmtl_heap_write_locked` -> `vkUpdateDescriptorSets` một lần cho mỗi view mới.
+- NVK `nvkmd_nvrm_mem.c` (trong patch, đọc toàn bộ): mỗi `vkAllocateMemory` = `nvRmApiAlloc` (bộ nhớ vật lý) +
+  `NV50_MEMORY_VIRTUAL` (`nvkmd_nvrm_va.c`) + `nvRmApiMapMemoryDma` -> ít nhất 3 lời gọi kernel, lý do plugin dùng pool.
+  VRAM dùng trang lớn 64 KB và `ALLOW_NONCONTIGUOUS` (tắt bằng `NVK_NO_BIGPAGE`/`NVK_NO_NONCONTIG`). Bộ nhớ LOCAL có
+  map CPU mặc định chuyển sang RAM hệ thống trừ khi `NVK_LOCAL_MAP_SYSMEM=0` và BAR1 phủ hết VRAM (F17). Bảng
+  `dev->mappings` không khóa trong patch (F16, chưa kết luận).
